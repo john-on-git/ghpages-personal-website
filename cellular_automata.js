@@ -1,6 +1,9 @@
 const resolution = {
     "x": () => window.screen.width * window.devicePixelRatio,
-    "y": () => window.screen.height * window.devicePixelRatio
+
+    //height of main-sheet is always equal to the height of the page - 15vh.
+    //Hmm, 0.15 overruns slightly, best to chop a bit off.
+    "y": () => (document.getElementById("main-sheet").scrollHeight + (0.1*window.screen.height))
 }
 
 class Recovering {
@@ -22,16 +25,20 @@ class Recovering {
     }
 }
 
+//Just a simple cellular automata class.
+//Of course, it's important to encapsulate all your code with classes 
+//Having it laid out in this way makes it easier to maintain
+//No one in their right mind would disagree with that, surely?
 class Automata {
     constructor(scale, canvas)
     {
-        this.scale = scale;
+        this.scale = scale; //this controls the DPI of the canvas. currently just set to a reasonable number for my screen
         this.margins = {"width": undefined, "height": undefined};
         this.canvas = canvas;
 
         this.data = [];
-        this.verticalHeight = Math.sqrt(this.scale**2 - (this.scale/2)**2);
-        this.ctx = canvas.getContext("2d");
+        this.verticalHeight = Math.sqrt(this.scale**2 - (this.scale/2)**2); //find the vertical height of the triangle with side length this.scale. Pythagoras we love you
+        this.ctx = canvas.getContext("2d"); 
 
         this.resize();
     }
@@ -39,34 +46,27 @@ class Automata {
     //function to resize the canvas and automata to fit the screen
     resize()
     {
+        //get the actual html display height of the canvas element
+        this.canvas.style.height = resolution.y() + "px";
+
+        //resize the resolution of the canvas to have the aspect ratio it's being displayed at, while maintaining a reasonable resolution
         canvas.width = Math.max(resolution.x(), 2560);
-        canvas.height = canvas.width * (resolution.y()/resolution.x());
-            
+        canvas.height = canvas.width * (this.canvas.scrollHeight/this.canvas.scrollWidth);
+
+        //size the cellular automata grid to the display
         this.width = Math.floor(canvas.width / this.scale);
         this.height = Math.floor(canvas.height / this.verticalHeight); //should be based on screen aspect ratio
 
-        const x = (this.width-.5) * this.scale; //width of triangle field + overhanging triangles + dot circumference
-        const y = ((this.height-1) * this.verticalHeight) ;
-
-        this.temp = {};
-        this.temp.x = x;
-        this.temp.y = y;
-
-        this.margins.width = (canvas.width - x)/2;
-        this.margins.height = (canvas.height - y)/2;
-        
-        console.log(x, y, this.margins.width, this.margins.height);
-
+        //calculate margin size. the display is filled with as many cells as possible, then the margins are the remaining space
+        this.margins.width = (canvas.width - ((this.width-.5) * this.scale))/2;
+        this.margins.height = (canvas.height - (((this.height-1) * this.verticalHeight)))/2;
+                
+        //canvas config is reset upon resizing the canvas, so it must be set again
         this.ctx.lineWidth = 4;
         this.ctx.fillStyle = "#0E0067";
         this.ctx.strokeStyle = "#0026FFC0";
 
-        //canvas.style.height = resolution.x + "px";
-        //canvas.style.width = resolution.y + "px";
-        
-        this.reset(); //reset because the size of the automata grid may have changed
-
-        //find the vertical height of the triangle with side length this.scale
+        this.reset(); //reset the automata logic because the size of the grid may have changed
     }
     reset()
     {
@@ -183,79 +183,15 @@ class Automata {
         }
         this.data = this.nextData;
         
+        //reset the automaton if there's somehow no activity
         if(noChange) 
         {
             this.reset();
-        }
-    }
-
-    advanceConway()
-    {
-        let noChange = true;
-        for(let i=1; i<this.width-1;i++)
-        {
-            for(let j=1; j<this.height-1;j++)
-            {
-                //count neighbours
-                let nNeighbours = 0;
-                if(this.data[i-1][j+1])//topleft
-                {
-                    nNeighbours++;
-                }
-                if(this.data[i+1][j+1])//topright
-                {
-                    nNeighbours++;
-                }
-                if(this.data[i-1][j])//left
-                {
-                    nNeighbours++;
-                }
-                if(this.data[i+1][j])//right
-                {
-                    nNeighbours++;
-                }
-                if(this.data[i-1][j-1])//botleft
-                {
-                    nNeighbours++;
-                }
-                if(this.data[i+1][j-1])//botright
-                {
-                    nNeighbours++;
-                }
-                
-                //logic
-                if(this.data[i][j] && nNeighbours<2)
-                {
-                    this.data[i][j] = false;
-                    noChange = false;
-                }
-                else if(this.data[i][j] && nNeighbours>3)
-                {
-                    this.data[i][j] = false;
-                    noChange = false;  
-                }
-                else if(!this.data[i][j] && nNeighbours===3)
-                {
-                    this.data[i][j] = true;  
-                    noChange = false; 
-                }
-            }
-        }
-
-        if(noChange) 
-        {
-            console.log("reset");
-            this.reset();
-        }
-        else
-        {
-            console.log("advance");
         }
     }
     draw()
     {
         this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
-        
 
         for(let j=0; j<this.height;j++)
         {
