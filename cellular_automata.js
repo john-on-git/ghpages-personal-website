@@ -1,3 +1,8 @@
+const resolution = {
+    "x": () => window.screen.width * window.devicePixelRatio,
+    "y": () => window.screen.height * window.devicePixelRatio
+}
+
 class Recovering {
     constructor(time)
     {
@@ -18,21 +23,50 @@ class Recovering {
 }
 
 class Automata {
-    constructor(width, height, margin, scale)
+    constructor(scale, canvas)
     {
-        this.width = width;
-        this.height = height;
-
-        this.margin = margin;
         this.scale = scale;
+        this.margins = {"width": undefined, "height": undefined};
+        this.canvas = canvas;
 
         this.data = [];
-
-        this.reset();
-        //find the vertical height of the triangle with side length this.scale
         this.verticalHeight = Math.sqrt(this.scale**2 - (this.scale/2)**2);
-        //hyp = sqr(l**2 + (l/2)**2)
-        //l = sqr(hyp**2 - (l/2)**2)
+        this.ctx = canvas.getContext("2d");
+
+        this.resize();
+    }
+    
+    //function to resize the canvas and automata to fit the screen
+    resize()
+    {
+        canvas.width = Math.max(resolution.x(), 2560);
+        canvas.height = canvas.width * (resolution.y()/resolution.x());
+            
+        this.width = Math.floor(canvas.width / this.scale);
+        this.height = Math.floor(canvas.height / this.verticalHeight); //should be based on screen aspect ratio
+
+        const x = (this.width-.5) * this.scale; //width of triangle field + overhanging triangles + dot circumference
+        const y = ((this.height-1) * this.verticalHeight) ;
+
+        this.temp = {};
+        this.temp.x = x;
+        this.temp.y = y;
+
+        this.margins.width = (canvas.width - x)/2;
+        this.margins.height = (canvas.height - y)/2;
+        
+        console.log(x, y, this.margins.width, this.margins.height);
+
+        this.ctx.lineWidth = 4;
+        this.ctx.fillStyle = "#0E0067";
+        this.ctx.strokeStyle = "#0026FFC0";
+
+        //canvas.style.height = resolution.x + "px";
+        //canvas.style.width = resolution.y + "px";
+        
+        this.reset(); //reset because the size of the automata grid may have changed
+
+        //find the vertical height of the triangle with side length this.scale
     }
     reset()
     {
@@ -42,9 +76,7 @@ class Automata {
             this.data[i] = [];
             for(let j=0; j<this.height;j++)
             {
-                this.data[i][j] = false;
                 this.data[i][j] = Math.floor(Math.random() * 4) === 1 ? "online" : "offline";
-                //1-in-10 chance of being live
             }
         }
     }
@@ -220,18 +252,21 @@ class Automata {
             console.log("advance");
         }
     }
-    draw(ctx)
+    draw()
     {
-        ctx.fillStyle = "#0E0067";
-        ctx.strokeStyle = "#0026FFC0";
+        this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
+        
 
         for(let j=0; j<this.height;j++)
         {
-            const point = [undefined, (this.margin*this.scale)+(j*this.verticalHeight)];
+            const point = {
+                "x": undefined,
+                "y": this.margins.height + (j*this.verticalHeight)
+            };
             for(let i=0; i<this.width;i++)
             {
                 //dots
-                point[0] = (this.margin*this.scale)+(i*this.scale) + (j%2===0 ? this.scale/4 : -this.scale/4);
+                point.x = this.margins.width + ((i)*this.scale) + (j%2===0 ? 0 : this.scale/2);
 
                 //lines (cell contents)
                 //every other cell, look at the neighbours in the bottom-right half, these haven't been processed yet.
@@ -242,86 +277,88 @@ class Automata {
                     if(i<this.width-1 && this.data[i+1][j]==="online")
                     {
                         
-                        ctx.beginPath();
-                        ctx.moveTo(point[0], point[1]);
-                        ctx.lineTo(
-                            point[0] + this.scale,
-                            point[1]);
-                        ctx.stroke();
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(point.x, point.y);
+                        this.ctx.lineTo(
+                            point.x + this.scale,
+                            point.y);
+                        this.ctx.stroke();
                     }
 
                     //bottom left
-                    if(j<this.height-1 && ((j%2===0 && this.data[i][j+1]==="online") || (i>0 && this.data[i-1][j+1]==="online")))
+                    if(
+                        j<this.height-1 && 
+                        (
+                            (j%2!==0 && this.data[i][j+1]==="online") || 
+                            (i>0 && this.data[i-1][j+1]==="online")
+                        )
+                    )
                     {
-                        ctx.beginPath();
-                        ctx.moveTo(point[0], point[1]);
-                        ctx.lineTo(
-                            point[0] - (this.scale/2),
-                            point[1]+this.verticalHeight
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(point.x, point.y);
+                        this.ctx.lineTo(
+                            point.x - (this.scale/2),
+                            point.y+this.verticalHeight
                         );
-                        ctx.stroke();
+                        this.ctx.stroke();
                     }
                     
                     //bottom right
-                    if(j<this.height-1 && ((j%2!=0 && this.data[i][j+1]==="online") || (i<this.width-1 && this.data[i+1][j+1]==="online")))
+                    if(
+                        j<this.height-1 && 
+                        (
+                            (j%2===0 && this.data[i][j+1]==="online") || 
+                            (i<this.width-1 && this.data[i+1][j+1]==="online")
+                        )
+                    )
                     {
-                        ctx.beginPath();
-                        ctx.moveTo(point[0], point[1]);
-                        ctx.lineTo(
-                            point[0] + this.scale/2,
-                            point[1]+this.verticalHeight
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(point.x, point.y);
+                        this.ctx.lineTo(
+                            point.x + (this.scale/2),
+                            point.y+this.verticalHeight
                         );
-                        ctx.stroke();
+                        this.ctx.stroke();
                     }
                 }
                 //draw dot
-                ctx.beginPath();
-                ctx.arc(
-                    point[0],
-                    point[1],
+                this.ctx.beginPath();
+                this.ctx.arc(
+                    point.x,
+                    point.y,
                     
-                    this.scale * .05, 0, 2 * Math.PI);
-                ctx.fill();
+                    this.scale * .05,
+                    0,
+                    2 * Math.PI
+                );
+                this.ctx.fill();
             }   
         }
     }
 }
 
-//set up canvas and automata
-const canvas = document.getElementById("cellular-canvas");
-const context = canvas.getContext("2d");
-const automata = new Automata(
-    26,18, //should be based on screen aspect ratio
-    
-    .5,75
-);
 
-//function to resize the canvas to fit the screen, advance and draw the automata
-function resize()
-{
-    //set to zero first so the previous size doesn't contribute to the scroll h/w
-    canvas.width = 0;
-    canvas.height = 0;
-
-    canvas.height = document.documentElement.scrollHeight;
-    canvas.width = document.documentElement.scrollWidth;
-
-    automata.scale = (canvas.width / automata.width);
-}
-function draw()
-{
-    resize();
-    automata.advance();
-    automata.draw(context);
-}
 
 //disable noJS placeholder
 document.querySelector("body").style["background-image"] = "none";
 
+//set up canvas and automata
+const canvas = document.getElementById("cellular-canvas");
+const automata = new Automata(
+    100,
+    canvas
+);
+
+function draw()
+{
+    automata.advance();
+    automata.draw();
+}
+
 draw();
-window.setInterval(draw, 250);
-window.addEventListener("onresize", () => {
-    resize();
+setInterval(draw, 250);
+window.addEventListener("resize", () => {
+    automata.resize();
 })
 
 document.getElementById("button-kill-cellular-automata");
