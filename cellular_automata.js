@@ -32,7 +32,7 @@ class Recovering {
 class Automata {
     constructor(scale, canvas)
     {
-        this.scale = scale; //this controls the DPI of the canvas. currently just set to a reasonable number for my screen
+        this.scale = scale; //controls the size of the cells in pixels. should be inches to support high DPI displays, something for later
         this.margins = {"width": undefined, "height": undefined};
         this.canvas = canvas;
 
