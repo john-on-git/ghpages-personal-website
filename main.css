@@ -143,15 +143,13 @@ canvas {
         100% 2.5rem,
         calc(100% - 2.5rem) 0
     );
+
+    display: flex;
+    gap: 1rem;
 }
 
-
-
-#left-pane {
-    float: left;
-
-    width: 49%;
-    padding-right: 1%;
+#pale-sheet > div {
+    flex: 1;    
 }
 
 #featured {
@@ -187,28 +185,22 @@ canvas {
 
 
 #about-me {
-    float: right;
-    width: 49%;
+    height: 100%;
 
     text-align: justify;
 
     padding-left: calc(1% - 3px);
     border-left: solid 3px #0E0067;
+
+    display: flex;
+    gap: 1rem;
 }
 
-#col1 {
-    float: left;
-    width: 48%;
-
-}
-
-#col2 {
-    float: right;
-    width: 48%;
+#about-me > div {
+    flex: 1;
 }
 
 #headshot {
     width: 100%;
-    float: right;
     padding-bottom: 1rem;
 }
