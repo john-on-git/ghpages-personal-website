@@ -3,7 +3,7 @@ const resolution = {
 
     //height of main-sheet is always equal to the height of the page - 15vh.
     //Hmm, 0.15 overruns slightly, best to chop a bit off.
-    "y": () => (document.getElementById("main-sheet").scrollHeight) //+ (0.1*window.screen.height))
+    "y": () => (document.querySelector("body").scrollHeight) //+ (0.1*window.screen.height))
 }
 
 class Recovering {
