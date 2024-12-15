@@ -276,7 +276,8 @@ class Automata {
 
 
 //disable noJS placeholder
-document.querySelector("body").style["background-image"] = "none";
+const body = document.querySelector("body");
+body.style["background-image"] = "none";
 
 //set up canvas and automata
 const canvas = document.getElementById("cellular-canvas");
@@ -284,6 +285,13 @@ const automata = new Automata(
     100,
     canvas
 );
+
+//resize the sidebar with js. after significant time-wasting,
+//this doesn't seem to be possible with CSS for some reason :/
+const sidebar = document.getElementById("sidebar");
+const paleSheet = document.getElementById("pale-sheet");
+sidebar.style.height = (0.015 * body.scrollHeight) + paleSheet.scrollHeight + "px";
+
 
 function draw()
 {
@@ -293,7 +301,10 @@ function draw()
 
 draw();
 setInterval(draw, 250);
-window.addEventListener("resize", () => automata.resize());
+window.addEventListener("resize", () => {
+    sidebar.style.height = (0.015 * body.scrollHeight) + paleSheet.scrollHeight + "px";
+    automata.resize();
+});
 
 const gitHubLink = document.getElementById("github-link");
 const gitHubLogo = document.getElementById("github-logo");
