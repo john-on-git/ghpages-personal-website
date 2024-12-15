@@ -3,7 +3,7 @@ const resolution = {
 
     //height of main-sheet is always equal to the height of the page - 15vh.
     //Hmm, 0.15 overruns slightly, best to chop a bit off.
-    "y": () => (document.getElementById("main-sheet").scrollHeight + (0.1*window.screen.height))
+    "y": () => (document.getElementById("main-sheet").scrollHeight) //+ (0.1*window.screen.height))
 }
 
 class Recovering {
@@ -38,7 +38,7 @@ class Automata {
 
         this.data = [];
         this.verticalHeight = Math.sqrt(this.scale**2 - (this.scale/2)**2); //find the vertical height of the triangle with side length this.scale. Pythagoras we love you
-        this.ctx = canvas.getContext("2d"); 
+        this.ctx = this.canvas.getContext("2d"); 
 
         this.resize();
     }
@@ -293,8 +293,11 @@ function draw()
 
 draw();
 setInterval(draw, 250);
-window.addEventListener("resize", () => {
-    automata.resize();
-})
+window.addEventListener("resize", () => automata.resize());
+
+const gitHubLink = document.getElementById("github-link");
+const gitHubLogo = document.getElementById("github-logo");
+gitHubLink.addEventListener("mouseenter", () => gitHubLogo.src = "asset/GitHub_Lockup_Dark_OnHover.png");
+gitHubLink.addEventListener("mouseleave", () => gitHubLogo.src = "asset/GitHub_Lockup_Dark.png");
 
 document.getElementById("button-kill-cellular-automata");

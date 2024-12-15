@@ -48,3 +48,5 @@
 TODO
 	Figure out why the sidebar is slightly longer than the pale sheet and make it not be.
 		- height: fit-content
+	
+	sidebar/pale-sheet height is still broken: check Galaxy S20 horizontal

@@ -1,7 +1,7 @@
-html {
+html, body, p {
     margin: 0;
     padding: 0;
-    height: 100%;
+    height: 100vh;
 }
 
 hr {
@@ -9,8 +9,6 @@ hr {
 }
 
 body {
-    height: 100%;
-
     color: #0E0067;
     font-family: 'Arial';
     /*used if JS fails*/
@@ -18,52 +16,59 @@ body {
     background-size: 3%;
 }
 
-body, p {
-    margin: 0;
-    padding: 0;
-}
 
-canvas {
-    z-index: -1;
-}
 #cellular-canvas {
     position: absolute;
     width: 100%;
-    height: 100%;
     
     margin: 0;
+
+    z-index: -1;
 }
 
 #main-sheet {
-    position: absolute;
-    top: 15%;
+    position: relative;
+    top: 15vh;
     left: 0;
 
     width: 90%;
-    min-height: 85%;
+    height: fit-content;
+    
+    
+    /*
+        it doesn't seem like it's possible to have the child divs
+        fill the full height with flexbox, so inline-block it is
+    */
+    font-size: 0;
+
+    
+    
+    background-color: #00ff00;
 }
 
 #sidebar {
-    position: absolute;;
-    
-    width: 14%;
+    position: relative;
+    width: 15%;
     height: 100%;
 
     background-color: #636363;
-    
+
     box-sizing: border-box;
     padding-left: 1%;
     padding-right: 1%;
     padding-top: 1%;
 
-
     border-top: 10px ridge #C0C0C0;
     border-right: 10px ridge #C0C0C0;
-    z-index: 1;
+
+    display: inline-block;
+    vertical-align: top;
 }
 
 .sidebar-link {
     display: block;
+
+    height: 2rem;
 
     color: black;
     background-color: #F5F7F7;
@@ -71,10 +76,11 @@ canvas {
     font-family: 'Courier New', Courier, monospace;
     font-size: 1.5rem;
     font-weight: bold;
+    text-decoration: none;
+
     text-align: left;
     align-content: center;
 
-    text-decoration: none;
 
     margin-bottom: 1rem;
 
@@ -89,24 +95,24 @@ canvas {
         calc(100% - .75rem) 0
     );
 }
-
 .sidebar-link:hover {
     color:#0026FF;
 }
-
 .sidebar-link-inactive {
     display: block;
 
-    color: #F5F7F7;
-    background-color: #0026FF;
+    height: 2rem;
+
+    color: #0026FF;
+    background-color: #0E0067;
     
     font-family: 'Courier New', Courier, monospace;
     font-size: 1.5rem;
     font-weight: bold;
+    text-decoration: none;
+
     text-align: left;
     align-content: center;
-
-    text-decoration: none;
 
     margin-bottom: 1rem;
 
@@ -121,18 +127,20 @@ canvas {
         calc(100% - .75rem) 0
     );
 }
+.sidebar-link > img {
+    max-height: 1.5rem;
+    max-width: 75%;
+}
 
 #pale-sheet {
-    flex-grow: 1;
-    position: absolute;
+    position: relative;
+    top: 1.5%; /*should probably be margin-top, but margin-top is inexplicably a different size?*/
 
-    width: 81%;
-    height: 98.5%;
+    width: 80%;
+    min-height: 98.5%;
     background-color: #F5F7F7E5;
 
-
-    top: 1.5%; /*should probably be margin-top, but margi-top is inexplicably a different size?*/
-    left: 14%;
+    font-size: 1rem;
 
     box-sizing: border-box;
     padding-top: 3%;
@@ -148,26 +156,31 @@ canvas {
         calc(100% - 2.5rem) 0
     );
 
-    display: flex;
-    gap: 1rem;
+    display: inline-block;
+    vertical-align: top;
 }
 
 #pale-sheet > div {
+    display: flex;
+    gap: 1rem;
+}
+#pale-sheet > div > div {
     flex: 1;
 }
+
 #featured {
     position: relative;
     width: 100%;
-    height: 50vh;
     
-    
-    text-align: center;
-    align-content: center;
-
     margin-bottom: 1rem;
 }
 #featured > p {
     font-size: 5vw;
+    height: 20vw;
+        
+    text-align: center;
+    align-content: center;
+
     transform: rotate(-35deg);
 }
 
@@ -187,8 +200,6 @@ canvas {
 
 
 #about-me {
-    height: 100%;
-
     text-align: justify;
 
     padding-left: calc(1% - 3px);
