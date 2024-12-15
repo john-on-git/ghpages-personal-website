@@ -1,7 +1,9 @@
+html, body {
+    height: 100%;
+}
 html, body, p {
     margin: 0;
     padding: 0;
-    height: 100vh;
 }
 
 hr {
@@ -33,7 +35,7 @@ body {
 
     width: 90%;
     height: fit-content;
-    
+    min-height: 85%;
     
     /*
         it doesn't seem like it's possible to have the child divs
@@ -137,7 +139,8 @@ body {
     top: 1.5%; /*should probably be margin-top, but margin-top is inexplicably a different size?*/
 
     width: 80%;
-    min-height: 98.5%;
+    height: fit-content;
+    min-height: 85vh;
     background-color: #F5F7F7E5;
 
     font-size: 1rem;
@@ -165,6 +168,7 @@ body {
     gap: 1rem;
 }
 #pale-sheet > div > div {
+    height: 100%;
     flex: 1;
 }
 
