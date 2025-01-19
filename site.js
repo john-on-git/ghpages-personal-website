@@ -1,5 +1,3 @@
-const body = document.querySelector("body");
-
 class Recovering {
     constructor(time)
     {
@@ -38,16 +36,18 @@ class Automata {
     //function to resize the canvas and automata to fit the screen
     resize()
     {
-        this.canvas.style.height = (body.scrollHeight - 25) + "px";
-        this.canvas.style.width = (body.scrollWidth - 25) + "px";
+        this.canvas.style.height = (document.body.scrollHeight - 25) + "px";
+        this.canvas.style.width = (document.body.scrollWidth - 25) + "px";
 
         //resize the resolution of the canvas to have the aspect ratio it's being displayed at, while maintaining a reasonable resolution
         //for a canvas height/width is the resolution, NOT the deprecated html height/width 
-        this.canvas.width = Math.max(body.offsetWidth, 2560);
+        this.canvas.width = Math.max(document.body.offsetWidth, 2560);
         this.canvas.height = canvas.width * (this.canvas.scrollHeight/this.canvas.scrollWidth);
 
 
         //size the cellular automata grid to the display
+        const prevWidth = this.width;
+        const prevHeight = this.height;
         this.width = Math.floor(this.canvas.width / this.scale);
         this.height = Math.floor(this.canvas.height / this.verticalHeight); //should be based on screen aspect ratio
 
@@ -60,7 +60,25 @@ class Automata {
         this.ctx.fillStyle = "#0E0067";
         this.ctx.strokeStyle = "#0026FFC0";
 
-        this.reset(); //reset the automata logic because the size of the grid may have changed
+        //update the display to match the new width
+        this.nextData = [];
+        for(let i=0; i<this.width;i++)
+        {
+            this.nextData[i] = [];
+            for(let j=0; j<this.height;j++)
+            {
+                //copy over data if it exists, otherwise it's empty
+                if(prevHeight>i && prevWidth>j)
+                {
+                    this.nextData[i][j] = this.data[i][j]; 
+                }
+                else
+                {
+                    this.nextData[i][j] = "offline";   
+                }
+            }
+        }
+        this.data = this.nextData;
     }
     reset()
     {
@@ -268,7 +286,7 @@ class Automata {
 }
 
 //disable noJS placeholder
-body.style["background-image"] = "none";
+document.body.style["background-image"] = "none";
 
 //set up canvas and automata
 const canvas = document.getElementById("cellular-canvas");
@@ -283,14 +301,13 @@ const automata = new Automata(
 const sidebar = document.getElementById("sidebar");
 const paleSheet = document.getElementById("pale-sheet");
 
-function sidebarHeight()
+function calcSidebarHeight()
 {
-    return paleSheet.offsetHeight + "px";
+    //0.015 = 0.165vh - 0.15vh
+    return paleSheet.scrollHeight + (0.015 * document.body.offsetHeight) + "px";
 }
-console.log(paleSheet.getBoundingClientRect());
-console.log(paleSheet.offsetHeight);
 
-sidebar.style.height = sidebarHeight();
+sidebar.style.height = calcSidebarHeight();
 
 //start drawing cellular automata
 function draw()
@@ -299,10 +316,11 @@ function draw()
     automata.draw();
 }
 draw();
-window.addEventListener("resize", () => {
-    sidebar.style.height = sidebarHeight();
+const resizeAll = () => {
+    sidebar.style.height = calcSidebarHeight();
     automata.resize();
-});
+};
+window.addEventListener("resize", resizeAll);
 
 //start/stop background
 let repeatDrawEventID = setInterval(draw, 250);
@@ -352,12 +370,11 @@ function calcIsWitchingHours()
 let lastWitchCheck = calcIsWitchingHours();
 witchTitle.hidden = !lastWitchCheck;
 setInterval(() => {
-    const isWitchingHours = !calcIsWitchingHours();
+    const isWitchingHours = calcIsWitchingHours();
     //it appears and disappears gradually
     
     if(isWitchingHours!=lastWitchCheck) //if it changed
     {
-        console.log("foo");
         if(isWitchingHours)
         {
             witchTitle.hidden = false;

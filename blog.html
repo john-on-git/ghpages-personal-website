@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>John Site | Blog</title>
+		<meta charset="utf-8"/>
         <link rel="stylesheet" href="site.css">
         <link rel="stylesheet" href="blog.css">
         <script src="site.js" defer></script>
@@ -26,8 +28,23 @@
                 <h2 hidden>Couldn't Get Articles</h2>
                 <h3 hidden>the server is probably down</h3>
             </div>
-            <div id="grid-articles">
-                <!--for article in articles-->
+            <div id="article-index">
+                <div id="article-grid">
+                    <!--JS adds... for article in articles-->
+                </div>
+                <button id="index-prev">←</button>
+                <button id="index-next">→</button>
+            </div>
+            <div hidden id="article-details">
+                <div class="article-header">
+                    <button id="button-article-details-back">←</button>                
+                    <h2 id="article-details-title"></h2>
+                    <p>By <span id="article-details-authors"></span></p>
+                    <p>Last updated: <span id="article-details-posted-at"></span></p>
+                </div>
+                <div id="article-details-snippet-container">
+                    <!--JS adds article content in here-->
+                </div>
             </div>
         </div>
     </body>

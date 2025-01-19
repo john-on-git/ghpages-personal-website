@@ -32,6 +32,9 @@ canvas {
 
     z-index: -1;
 }
+button:hover {
+    cursor: pointer;
+}
 
 .emoji-container {
     display: inline;
@@ -52,20 +55,21 @@ canvas {
 
 #sidebar {
     position: relative;
-    top: 15%;
     
     width: 15%;
+
+    top: 15vh;
     height: 85vh;
     
     background-color: #636363;
 
-    /*box-sizing: border-box;*/
+    box-sizing: border-box;
     padding-left: 1%;
     padding-right: 1%;
     padding-top: 1%;
 
-    border-top: 10px ridge #C0C0C0;
-    border-right: 10px ridge #C0C0C0;
+    border-top: 1vmin ridge #C0C0C0;
+    border-right: 1vmin ridge #C0C0C0;
 
     display: inline-block;
     vertical-align: top;
@@ -74,10 +78,14 @@ canvas {
 .sidebar-link {
     display: block;
 
-    height: 2rem;
+    height: calc(2rem - 2px); /*height of bottom border: 2px*/
 
     color: black;
     background-color: #F5F7F7;
+    
+    border-left: 2px solid #C0C0C0;
+    border-bottom: 2px solid #C0C0C0;
+
     
     font-family: 'Courier New', Courier, monospace;
     font-size: 1.5rem;
@@ -111,6 +119,8 @@ canvas {
 
     color: #0026FF;
     background-color: #0E0067;
+    
+    border: 2px solid #080039;
     
     font-family: 'Courier New', Courier, monospace;
     font-size: 1.5rem;

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>John Site | Main</title>
+		<meta charset="utf-8"/>
         <link rel="stylesheet" href="site.css">
         <link rel="stylesheet" href="main.css">
         <script src="site.js" defer></script>
@@ -24,16 +26,24 @@
             <div id="main-content">
                 <div id="left-pane">
                     <div id="featured">
-                        <p>TODO<br>Featured</p>
+                        <p hidden style="display:none">
+                            No Featured
+                            <br>
+                            Article RN
+                        </p>
+                        <p><a href="blog.html?id=1">
+                            PLATONIC
+                            <br>
+                            SOLIDS
+                        </a></p>
                     </div>
                     <hr>
                     <div id="background-info">
                         <h1>What's the Background?</h1>
                         <p>
                             It's a cellular automata. What does it remind you of?
-                            The design goal was to create something reminiscent of both lightning and constellations, something that would produce plenty of hexagons: nature's most futuristic shape.
+                            The design goal was to create something reminiscent of the constellations, something that would produce plenty of hexagons: nature's most futuristic shape.
                         </p>
-                        <button hidden id="button-kill-background">Pause Background</button>
                     </div>
                 </div>
                 <div id="about-me">
@@ -52,7 +62,7 @@
                         </p>
                     </div>
                     <div id="site-technical"> <!-- space for ≈500 words -->
-                        <h2>About the Site</h2>
+                        <h2>About This Site</h2>
                         <p>
                             Personal websites are in vogue this millenium, so I just had to get online.
                             This site's primary purpose is to provide a place to publicise my professional accomplishments,
@@ -63,10 +73,8 @@
                         <br>
                         <p>
                             The site was created with just HTML/CSS/JS, no frameworks.
-                            <span style="color:red">
-                                The backend is... TODO (prob Python).
-                                It'll use a microservice-based architecture to serve the dynamic sections, such as the blog.
-                            </span>
+                            The background uses a microservice-based architecture, to allow mix-and-matching of differenct technologies.
+                            At the moment, the only service is the for the <a href="blog.html">blog</a>: C# Asp.Net, with Entity Framework.
                         </p>
                         <br>
                         <p>	
