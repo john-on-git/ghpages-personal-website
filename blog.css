@@ -25,7 +25,7 @@
 }
 #grid-articles > div {
     border: 1px solid red;
-    height: calc(20.875vh - 1rem - 1vh);
+    height: calc(16.875vh - 1rem);
 }
 
 /*83.5*/

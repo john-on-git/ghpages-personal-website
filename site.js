@@ -38,20 +38,23 @@ class Automata {
     //function to resize the canvas and automata to fit the screen
     resize()
     {
-        //get the actual html display height of the canvas element
+        this.canvas.style.height = (body.scrollHeight - 25) + "px";
+        this.canvas.style.width = (body.scrollWidth - 25) + "px";
 
         //resize the resolution of the canvas to have the aspect ratio it's being displayed at, while maintaining a reasonable resolution
-        this.canvas.style.width = body.offsetWidth + "px";
-        this.canvas.style.height = body.offsetHeight + "px";
+        //for a canvas height/width is the resolution, NOT the deprecated html height/width 
+        this.canvas.width = Math.max(body.offsetWidth, 2560);
+        this.canvas.height = canvas.width * (this.canvas.scrollHeight/this.canvas.scrollWidth);
+
 
         //size the cellular automata grid to the display
-        this.width = Math.floor(canvas.width / this.scale);
-        this.height = Math.floor(canvas.height / this.verticalHeight); //should be based on screen aspect ratio
+        this.width = Math.floor(this.canvas.width / this.scale);
+        this.height = Math.floor(this.canvas.height / this.verticalHeight); //should be based on screen aspect ratio
 
         //calculate margin size. the display is filled with as many cells as possible, then the margins are the remaining space
-        this.margins.width = 100; //(2560 - ((this.width-.5) * this.scale))/2;
-        this.margins.height = 100; //(1440 - (((this.height-1) * this.verticalHeight)))/2;
-                
+        this.margins.width = (canvas.width - ((this.width-.5) * this.scale))/2;
+        this.margins.height = (canvas.height - (((this.height-1) * this.verticalHeight)))/2;
+            
         //canvas config is reset upon resizing the canvas, so it must be set again
         this.ctx.lineWidth = 4;
         this.ctx.fillStyle = "#0E0067";
@@ -182,7 +185,7 @@ class Automata {
     }
     draw()
     {
-        this.ctx.clearRect(0,0, this.canvas.offsetWidth, this.canvas.offsetHeight);
+        this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
 
         for(let j=0; j<this.height;j++)
         {
