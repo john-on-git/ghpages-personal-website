@@ -164,7 +164,7 @@ const details = {
 };
 
 
-//this function sets view state to correspond to state object above
+//this function updates the view according to the querystring state
 async function updateView() {
     const url = new URLSearchParams(window.location.search);
     const currentArticle = url.get("id");
