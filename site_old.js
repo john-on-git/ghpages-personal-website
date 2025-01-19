@@ -47,10 +47,9 @@ class Automata {
     resize()
     {
         //get the actual html display height of the canvas element
-        this.canvas.style.height = resolution.y() + "px";
 
         //resize the resolution of the canvas to have the aspect ratio it's being displayed at, while maintaining a reasonable resolution
-        canvas.width = Math.max(resolution.x(), 2560);
+        canvas.width = Math.max(body.offsetWidth, 2560);
         canvas.height = canvas.width * (this.canvas.scrollHeight/this.canvas.scrollWidth);
 
         //size the cellular automata grid to the display
@@ -273,8 +272,6 @@ class Automata {
     }
 }
 
-
-
 //disable noJS placeholder
 const body = document.querySelector("body");
 body.style["background-image"] = "none";
@@ -292,23 +289,71 @@ const sidebar = document.getElementById("sidebar");
 const paleSheet = document.getElementById("pale-sheet");
 sidebar.style.height = (0.015 * body.scrollHeight) + paleSheet.scrollHeight + "px";
 
-
+//start drawing cellular automata
 function draw()
 {
     automata.advance();
     automata.draw();
 }
-
 draw();
-setInterval(draw, 250);
 window.addEventListener("resize", () => {
     sidebar.style.height = (0.015 * body.scrollHeight) + paleSheet.scrollHeight + "px";
     automata.resize();
 });
 
+//start/stop background
+let repeatDrawEventID = setInterval(draw, 250);
+/**
+const buttonKillBackground = document.getElementById("button-kill-background");
+buttonKillBackground.flipsideTextContent = "Start Background";
+buttonKillBackground.addEventListener("click", () => {
+    const temp = buttonKillBackground.textContent;
+    buttonKillBackground.textContent = buttonKillBackground.flipsideTextContent;
+    buttonKillBackground.flipsideTextContent = temp;
+    
+    if(repeatDrawEventID===null)
+    {
+        repeatDrawEventID = setInterval(draw, 250);
+        document.querySelectorAll(".suppressed-spin").forEach((x) => {
+            x.classList.add("spin");
+            x.classList.remove("suppressed-spin");
+        });
+    }
+    else
+    {
+        clearInterval(repeatDrawEventID);
+        document.querySelectorAll(".spin").forEach((x) => {
+            x.classList.remove("spin");
+            x.classList.add("suppressed-spin");
+        });
+        repeatDrawEventID = null;
+    }
+});
+ */
+
+//set up on hover color change for the github logo
 const gitHubLink = document.getElementById("github-link");
 const gitHubLogo = document.getElementById("github-logo");
 gitHubLink.addEventListener("mouseenter", () => gitHubLogo.src = "asset/GitHub_Lockup_Dark_OnHover.png");
 gitHubLink.addEventListener("mouseleave", () => gitHubLogo.src = "asset/GitHub_Lockup_Dark.png");
 
-document.getElementById("button-kill-cellular-automata");
+
+//set up listener to enable secret title if it's after 3am
+function updateTitle()
+{
+    const thisHour = new Date().getHours();
+    const witchTitle = document.getElementById("witch-title");
+    const visible = !(thisHour>=23 && thisHour<6);
+    
+    witchTitle.hidden = visible;
+    if(visible) 
+    {
+        witchTitle.classList.add("fade-in");
+    }
+    else 
+    { 
+        witchTitle.classList.remove("fade-in"); 
+    }
+}
+updateTitle();
+setInterval(updateTitle, 60000); //every minute

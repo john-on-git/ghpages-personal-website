@@ -1,21 +1,33 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="main.css">
-        <script src="cellular_automata.js" defer></script>
+        <link rel="stylesheet" href="site.css">
+        <link rel="stylesheet" href="blog.css">
+        <script src="site.js" defer></script>
+        <script src="blog.js" defer></script>
     </head>
     <body>
-        <canvas id="cellular-canvas" width="1920" height="1080"></canvas>
-        <div id="main-sheet">
-            <div id="sidebar">
-                <a id="main-link" class="sidebar-link" href="main.html">Main</a>
-                <a id="proj-link" class="sidebar-link" href="projects.html">Projects</a>
-                <p id="blog-link" class="sidebar-link-inactive">Blog</p>
-                <a id="github-link" class="sidebar-link" href="https://github.com/John-on-git"><img id="github-logo" src="asset/GitHub_Lockup_Dark.png"></a>
-                <!--web neighbourhood, or webring back/forth-->
+        <canvas id="cellular-canvas" width="100", height="100"></canvas>
+        <img hidden id="witch-title" src="asset/gibberish.png">
+        <div id="sidebar">
+            <a id="main-link" class="sidebar-link" href="main.html">Main</a>
+            <a id="blog-link" class="sidebar-link-inactive">Blog</a>
+            <a id="github-link" class="sidebar-link" href="https://github.com/John-on-git"><img id="github-logo" src="asset/GitHub_Lockup_Dark.png"></a>
+            <!--web neighbourhood, or webring back/forth-->
+            <div hidden class="random-symbol-grid">
+                <img class="" src="asset/symbols/peace.png">
+                <img class="" src="asset/symbols/yingyang.png">
+                <img class="spin" src="asset/symbols/angel_ray.png">
+                <img class="flip" src="asset/symbols/smile.png">
             </div>
-            <div id="pale-sheet" class="notched">
-                <h1 style="font-size: 20rem; color:red; text-align:center; width:100%;">TODO</h1>
+        </div>
+        <div id="pale-sheet" class="notched">
+            <div hidden id="title-fetch-error">
+                <h2 hidden>Couldn't Get Articles</h2>
+                <h3 hidden>the server is probably down</h3>
+            </div>
+            <div id="grid-articles">
+                <!--for article in articles-->
             </div>
         </div>
     </body>

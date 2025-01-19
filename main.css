@@ -1,179 +1,6 @@
-html {
-    height: 100%;
-}
-body {
-    height: 100%;
-    min-height: 100%;
-}
-html, body, p {
-    margin: 0;
-    padding: 0;
-}
-
-hr {
-    color: #0E0067;
-}
-
-body {
-    color: #0E0067;
-    font-family: 'Arial';
-    /*used if JS fails*/
-    background-image: url("mockgrid.png");
-    background-size: 3%;
-    font-size: 0;
-}
-
-
-#cellular-canvas {
-    position: absolute;
-    width: 100%;
-    
-    margin: 0;
-
-    z-index: -1;
-}
-
-#main-sheet {
-    position: relative;
-    top: 15vh;
-    left: 0;
-
-    width: 90%;
-    /*
-        sidebar is wrong height. switching these makes the
-        main-sheet wrong height. maybe just remov it?
-    */
-    height: fit-content;
-    
-    /*
-        it doesn't seem like it's possible to have the child divs
-        fill the full height with flexbox, so inline-block it is
-    */
-    font-size: 0;
-
-    
-    
-    background-color: #00ff00;
-}
-
-#sidebar {
-    position: relative;
-    top: 15%;
-    
-    width: 15%;
-    height: 85vh;
-    background-color: #636363;
-
-    box-sizing: border-box;
-    padding-left: 1%;
-    padding-right: 1%;
-    padding-top: 1%;
-
-    border-top: 10px ridge #C0C0C0;
-    border-right: 10px ridge #C0C0C0;
-
-    display: inline-block;
-    vertical-align: top;
-}
-
-.sidebar-link {
-    display: block;
-
-    height: 2rem;
-
-    color: black;
-    background-color: #F5F7F7;
-    
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-decoration: none;
-
-    text-align: left;
-    align-content: center;
-
-
-    margin-bottom: 1rem;
-
-    padding: 1rem;
-    padding-right: 0;
-    
-    clip-path: polygon(
-        0 0,
-        0 100%,
-        100% 100%,
-        100% .75rem,
-        calc(100% - .75rem) 0
-    );
-}
-.sidebar-link:hover {
-    color:#0026FF;
-}
-.sidebar-link-inactive {
-    display: block;
-
-    height: 2rem;
-
-    color: #0026FF;
-    background-color: #0E0067;
-    
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-decoration: none;
-
-    text-align: left;
-    align-content: center;
-
-    margin-bottom: 1rem;
-
-    padding: 1rem;
-    padding-right: 0;
-
-    clip-path: polygon(
-        0 0,
-        0 100%,
-        100% 100%,
-        100% .75rem,
-        calc(100% - .75rem) 0
-    );
-}
-.sidebar-link > img {
-    max-height: 1.5rem;
-    max-width: 75%;
-}
-
-#pale-sheet {
-    position: relative;
-    top: 16.5%; /*should probably be margin-top, but margin-top is inexplicably a different size?*/
-
-    width: 80%;
-    height: fit-content;
-    min-height: 83.5%;
-    background-color: #F5F7F7E5;
-
-    font-size: 1rem;
-
-    box-sizing: border-box;
-    padding-top: 3%;
-    padding-left: 2%;
-    padding-right: 3%;
-    padding-bottom: 3%;
-    
-    clip-path: polygon(
-        0 0,
-        0 100%,
-        100% 100%,
-        100% 2.5rem,
-        calc(100% - 2.5rem) 0
-    );
-
-    display: inline-block;
-    vertical-align: top;
-}
-
 #pale-sheet > div {
     display: flex;
+    flex-flow: row wrap;
     gap: 1rem;
 }
 #pale-sheet > div > div {
@@ -202,12 +29,42 @@ body {
     width: 100%;
     
     padding-bottom: 1rem;
-}
-#background-info > h1 {
+
     text-align: center;
 }
 #background-info > p {
     text-align: justify;
+}
+#button-kill-background {
+    background-color: #F5F7F7;
+    
+    width: 15rem;
+    height: 3rem;
+
+    border-radius: 0;
+    
+    color: #0E0067;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+#button-kill-background:hover {
+    color:#0026FF
+}
+
+#main-content {
+    /*
+    position: relative;
+    top: 15vh;
+    left: 0;
+
+    width: 90%;
+    height: fit-content;
+    
+    font-size: 0;
+    */
+    display: flex;
 }
 
 

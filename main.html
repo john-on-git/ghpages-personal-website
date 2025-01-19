@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" href="site.css">
         <link rel="stylesheet" href="main.css">
-        <script src="cellular_automata.js" defer></script>
+        <script src="site.js" defer></script>
     </head>
     <body>
-        <canvas id="cellular-canvas" width="0" height="0"></canvas>
+        <canvas id="cellular-canvas"></canvas>
+        <img hidden id="witch-title" src="asset/gibberish.png">
         <div id="sidebar">
             <p id="main-link" class="sidebar-link-inactive">Main</p>
-            <!--
-            <a id="proj-link" class="sidebar-link" href="projects.html">Projects</a>
             <a id="blog-link" class="sidebar-link" href="blog.html">Blog</a>
-            -->
             <a id="github-link" class="sidebar-link" href="https://github.com/John-on-git"><img id="github-logo" src="asset/GitHub_Lockup_Dark.png"></a>
             <!--web neighbourhood, or webring back/forth-->
-
+            <div hidden class="random-symbol-grid">
+                <img class="" src="asset/symbols/peace.png">
+                <img class="" src="asset/symbols/yingyang.png">
+                <img class="spin" src="asset/symbols/angel_ray.png">
+                <img class="flip" src="asset/symbols/smile.png">
+            </div>
         </div>
         <div id="pale-sheet" class="notched">
-            <div>
+            <div id="main-content">
                 <div id="left-pane">
                     <div id="featured">
                         <p>TODO<br>Featured</p>
@@ -27,20 +31,24 @@
                         <h1>What's the Background?</h1>
                         <p>
                             It's a cellular automata. What does it remind you of?
-                            The design goal was to create something reminiscent of both lightning and constellations, and that would produce plenty of hexagons: nature's most futuristic shape.
+                            The design goal was to create something reminiscent of both lightning and constellations, something that would produce plenty of hexagons: nature's most futuristic shape.
                         </p>
+                        <button hidden id="button-kill-background">Pause Background</button>
                     </div>
                 </div>
                 <div id="about-me">
                     <div>
-                        <img id="headshot" src="headshot.jpg">
+                        <img id="headshot" src="asset/headshot.jpg">
                         <p>
-                            I'm John. My current goal is to become a professional software developer.
+                            Hi! I'm John. My current goal is to become a professional software developer.
                             I graduated from the University of Strathclyde in 2024, achieving a Bachelor's in Computer Science.
 
                             I have experience developing a variety of software, and, as you can see, that includes web development.
 
-                            I'm particularly passionate about simulations and video games.
+                            <!-- nah IDK, makes me sound a bit lazy. Hey you! Stop poking around in here.
+
+                                I'm particularly passionate about simulations and video games.
+                            -->
                         </p>
                     </div>
                     <div id="site-technical"> <!-- space for ≈500 words -->
@@ -54,11 +62,22 @@
                         </p>
                         <br>
                         <p>
-                            The site was created in pure HTML/CSS, with no frameworks, but a dash of JavaScript.
+                            The site was created with just HTML/CSS/JS, no frameworks.
                             <span style="color:red">
-                            It uses a microservice-based architecture to serve the dynamic sections, such as the blog.
-                            Not true at the moment. once it's implemented :/
+                                The backend is... TODO (prob Python).
+                                It'll use a microservice-based architecture to serve the dynamic sections, such as the blog.
                             </span>
+                        </p>
+                        <br>
+                        <p>	
+                            The site's design is supposed to evoke Y2K revival/webcore vibes, as I'm a huge fan of the artistic and musical scene.
+                            Aesthetic cues include skeuomorphism, arcane symbols, and the juxtaposition of organic shapes with clean modernist lines
+                            
+                            Unfortunately, it's quite difficult to incorporate that last point into a website. <span class="emoji-container"><img src="asset/symbols/sad.png"></span>
+                        </p>
+                        <br>
+                        <p>
+                            No generative AI was used in the development of this site.
                         </p>
                     </div>
                 </div>

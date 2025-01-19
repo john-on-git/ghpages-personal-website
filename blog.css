@@ -1,0 +1,31 @@
+#title-fetch-error {
+    display: block;
+    text-align: center;
+    line-height: 0;
+}
+
+#title-fetch-error > h2 {
+    visibility: inherit;
+    color: red;
+    font-size: 4rem;
+}
+
+#title-fetch-error > h3 {
+    visibility: inherit;
+    color: #ff7575;
+}
+
+#grid-articles {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: 1fr auto;
+    gap: 1rem;
+    
+    flex-grow: 1;
+}
+#grid-articles > div {
+    border: 1px solid red;
+    height: calc(20.875vh - 1rem - 1vh);
+}
+
+/*83.5*/

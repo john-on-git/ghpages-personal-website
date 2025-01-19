@@ -23,7 +23,10 @@
 		
 		+ I want some arcane looking sigils. Cellular automata!
 		
-		+ Timeline? YOU ARE HERE.
+		+ Timeline?
+			+ Achieved HND.
+			+ Achieved BSc.
+			+ YOU ARE HERE.
 		
 		+ Cellular Automata.
 			+ Grid shape?
@@ -44,7 +47,28 @@
 				+ Let's try implementing a basic one first, copy game of life and get a basic implementation,
 				  before getting weird with some custom transition rules.
 
-
+		+ Blog.
+			+ Alright, set up the backend and the schema. I know what to do for that, barring some minor decisions.
+			  Once it's there, I'll think about using it. These things have momentum.
+			+ Schema?
+				ID :: autoint
+				Title :: varchar
+				Authors :: varchar
+				snippet :: varchar
+				
+			+ API
+				+ GET articles
+					+ Params:
+						+ offset :: number //skip this many articles
+					+ return :: [{id::number, title::string, authors::string, preview::string}]
+				+ GET article
+					+ Params:
+						+ id :: number //id of the article to retrieve
+					+ return :: {title::string, authors::string, preview::string}
+			+ If I'm gonna do a preview, maybe it should just be the first element.
+			+ Since this is gonna be public, I want to lock it down and make sure data is only going out, minimise injection opportunities.
+			+ Really need to make sure it's up to best practicices on JS injection attacks as well.
+			+ Options are... Python Flask/Django, C# Asp.Net, could use Java. I think C# is the move because I don't have any projects with it right now.
 TODO
 	Figure out why the sidebar is slightly longer than the pale sheet and make it not be.
 		- height: fit-content
