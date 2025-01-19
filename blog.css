@@ -18,15 +18,15 @@
 #article-index > button {
     position: absolute;
     bottom: 1vh;
+    font-size: 2rem;
+    font-weight: bold;
 }
 
 #index-prev {
     left: 2vw;
-    font-size: 4.5rem;
 }
 #index-next {
     right: 3vw;
-    font-size: 4.5rem;
 }
 #article-grid {
     display: grid;
@@ -58,6 +58,7 @@
     height: 14vh;
 }
 #article-grid > button > h2 {
+    font-size: 2rem;
     padding-left: 1vw;
     padding-top: 1vw;
     margin: 0;
@@ -72,6 +73,11 @@
     height: 10vh;
 }
 
+#no-articles {
+    color: #b4afcf;
+    font-size: 8rem;
+    text-align: center;
+}
 
 #button-article-details-back {
     text-align: center;

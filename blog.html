@@ -29,18 +29,19 @@
                 <h3 hidden>the server is probably down</h3>
             </div>
             <div id="article-index">
+                <h1 hidden id="no-articles">No articles found.</h1>
                 <div id="article-grid">
                     <!--JS adds... for article in articles-->
                 </div>
-                <button id="index-prev">←</button>
-                <button id="index-next">→</button>
+                <button hidden id="index-prev">date++</button>
+                <button hidden id="index-next">date--</button>
             </div>
             <div hidden id="article-details">
                 <div class="article-header">
                     <button id="button-article-details-back">←</button>                
                     <h2 id="article-details-title"></h2>
                     <p>By <span id="article-details-authors"></span></p>
-                    <p>Last updated: <span id="article-details-posted-at"></span></p>
+                    <p>Last edited: <span id="article-details-posted-at"></span></p>
                 </div>
                 <div id="article-details-snippet-container">
                     <!--JS adds article content in here-->

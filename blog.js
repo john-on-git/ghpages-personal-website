@@ -12,7 +12,7 @@ function recursiveSetVisibility(node, bool)
         recursiveSetVisibility(node.children[i], bool);
     }
 }
-
+//all data/logic for drawing index view
 const index = {
     endpoint: API_LOCATION+"/article/index", 
     articlesPerPage: 12,
@@ -22,6 +22,7 @@ const index = {
     errorDisplay: document.getElementById("title-fetch-error"),
     buttonPrev: document.getElementById("index-prev"),
     buttonNext: document.getElementById("index-next"),
+    noArticles: document.getElementById("no-articles"),
     
     async use(offset)
     {
@@ -75,11 +76,20 @@ const index = {
     
             //update the view once everything's had time to load
     
+            if((offset===null || offset===0) && articles.length===0)
+            {
+                recursiveSetVisibility(this.noArticles, true);
+                this.noArticles.style.display = "block";
+            }
+            else
+            {
+                
+                recursiveSetVisibility(this.noArticles, false);
+                this.noArticles.style.display = "none";
+            }
+
             //hide buttons
             //if on first page, hide prev
-            let offset = new URLSearchParams(window.location.search).get("offset");
-            offset = offset===null ? 0 : parseInt(offset);
-            console.log(offset);
             if(offset<=0)
             {
                 recursiveSetVisibility(this.buttonPrev, false);
@@ -93,7 +103,7 @@ const index = {
             //if this is the last page (no more results), hide next
             if(articles.length<this.articlesPerPage)
             {
-                recursiveSetVisibility(this.buttonPrev, false);
+                recursiveSetVisibility(this.buttonNext, false);
                 this.buttonNext.style.display = "none";
             }
             else
@@ -113,7 +123,7 @@ const index = {
     }
 }
 
-
+//all data/logic for drawing details view
 const details = {
     endpoint: API_LOCATION+"/article/details?id=",
 
@@ -156,7 +166,7 @@ const details = {
 };
 
 
-//function, sets view state to correspond to state object above
+//this function sets view state to correspond to state object above
 async function updateView()
 {
     const url = new URLSearchParams(window.location.search);
@@ -174,6 +184,8 @@ async function updateView()
     }
     setTimeout(resizeAll, 250);
 }
+
+//set up button event listeners
 document.getElementById("button-article-details-back").addEventListener(
     "click",
     () => 
@@ -193,7 +205,6 @@ document.getElementById("button-article-details-back").addEventListener(
         updateView(); //redraw view
     }
 );
-
 document.getElementById("index-prev").addEventListener(
     "click",
     () => 

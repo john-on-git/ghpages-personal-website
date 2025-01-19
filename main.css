@@ -73,10 +73,15 @@
     text-align: justify;
 
     padding-left: calc(1% - 3px);
-    border-left: solid 3px #0E0067;
+    border-left: solid .15rem #0E0067;
 
     display: flex;
     gap: 1rem;
+}
+#email {
+    padding-top: 1rem;
+    text-align: center;
+    font-weight: bold;
 }
 #about-me > div {
     flex: 1;

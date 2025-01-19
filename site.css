@@ -11,7 +11,12 @@ html, body, p {
 }
 
 hr {
-    color: #0E0067;
+    height: 0;
+    border: 0;
+    border-top: .15rem solid #0E0067;
+}
+a:active {
+    color: cyan;
 }
 
 body {
