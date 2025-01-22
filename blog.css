@@ -4,13 +4,14 @@
     line-height: 0;
 }
 
+
 #title-fetch-error > h2 {
     visibility: inherit;
     color: red;
     font-size: 4rem;
 }
 
-#title-fetch-error > h3 {
+#title-fetch-error > h3, #title-fetch-error > div, #title-fetch-error > p {
     visibility: inherit;
     color: #ff7575;
 }
