@@ -2,7 +2,7 @@
 //will have to store offset state somewhere
 //maybe this should be object-oriented
 
-const API_LOCATION = "http://TODO.com";
+const API_LOCATION = "TODO";
 
 function recursiveSetVisibility(node, bool) {
     node.hidden = !bool;
