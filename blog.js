@@ -2,6 +2,9 @@
 //will have to store offset state somewhere
 //maybe this should be object-oriented
 
+//TODO
+    //set up data caching
+
 const API_LOCATION = "TODO";
 
 function recursiveSetVisibility(node, bool) {
@@ -186,10 +189,8 @@ document.getElementById("button-article-details-back").addEventListener(
     () => {
         const url = new URLSearchParams(window.location.search);
         let offset = url.get("offset");
-        console.log("btnback",offset);
         offset = offset===null ? 0 : parseInt(offset);
 
-        console.log("btnback",offset);
         window.history.replaceState( //navigate back to main
             null,
             "",
