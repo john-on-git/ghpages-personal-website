@@ -86,24 +86,29 @@
 #about-me > div {
     flex: 1;
 }
-#headshot-container {
+#headshot-flex-container {
     display: flex;
     width: 100%;
 }
 #headshot {
     display: inline;
 
-    margin-bottom: 1rem;
     width: 100%;
-    
-    border-bottom: 0.15rem solid #0E0067;
 }
-#headshot-pseudoborder {
+#headshot-pseudoborder-left {
     width: 0.15rem;
-    margin-bottom: 1rem;
     margin-top: 83.8%; /*setting the height won't work, but this inexplicably will*/
 
     background-color: #0E0067;
+}
+
+#headshot-pseudoborder-bottom {
+    height: 0.15rem;
+    width: 85.9%;
+
+    background-color: #0E0067;
+    
+    margin-bottom: 1rem;
 }
 
 #site-technical > h2 {
