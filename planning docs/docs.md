@@ -108,8 +108,12 @@
 			+ what should the character look like?
 				+ it needs to have wings
 				+ glowing clippy?
+DONE
+	+ Figure out why the sidebar is slightly longer than the pale sheet and make it not be.
+		+ height: fit-content
 TODO
-	Figure out why the sidebar is slightly longer than the pale sheet and make it not be.
-		- height: fit-content
-	
-	sidebar/pale-sheet height is still broken: check Galaxy S20 horizontal
+	+ cache articles locally to speed up the loading
+	+ where should I host images? ohh why didn't I think of this
+	+ mitigate canvas flicker on article load https://stackoverflow.com/questions/15799564/flickering-during-resizing-of-html5-canvas
+	+ sidebar/pale-sheet height is still broken: check Galaxy S20 horizontal
+	+ Make sure it's all accessible, disability compliant.
