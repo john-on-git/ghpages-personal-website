@@ -5,7 +5,7 @@
 //TODO
     //set up data caching
 
-const API_LOCATION = "TODO";
+const API_LOCATION = "https://blueblog.api.fourscore.dev";
 
 function recursiveSetVisibility(node, bool) {
     node.hidden = !bool;

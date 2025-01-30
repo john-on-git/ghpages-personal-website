@@ -67,8 +67,47 @@
 					+ return :: {title::string, authors::string, preview::string}
 			+ If I'm gonna do a preview, maybe it should just be the first element.
 			+ Since this is gonna be public, I want to lock it down and make sure data is only going out, minimise injection opportunities.
-			+ Really need to make sure it's up to best practicices on JS injection attacks as well.
+			+ Really need to make sure it's up to best practices on JS injection attacks as well.
 			+ Options are... Python Flask/Django, C# Asp.Net, could use Java. I think C# is the move because I don't have any projects with it right now.
+
+		+ virtual garden.
+			+ Ok so, I want to have an interactive 3D thing, where you can plant plants and add koi fish to a virtual pond.
+			+ How does it actually work mechanically tho.
+				+ I want to have a simulated ecosystem, so fish can eat plants or something. Maybe fish aren't the best for that...
+			+ Three.js, Godot, seem like they'd help.
+
+		+ CD break
+			+ clicking on the cd makes it crack
+			+ Click on it 3 times: it shatters and falls off, leaving a depression in the sidebar (persists through refreshes)
+			
+			+ record scratch, all animation stops
+			+ speech bubble from stage left: "HEY! I SAW THAT!"
+			+ mascot flies in from stage left. point at disc
+			+ "You broke it!" 
+			+ finger wag
+			+ "Don't worry, I'm sure we have another one..."
+			+ flies over to sidebar, opens up a door in the middle and looks in
+			+ "..."
+			+ begins digging through
+			+ "let's see..."
+			+ throws out 2-4 random pieces of junk, commenting on each of them
+				+ blue eyes white dragon (copyright 😥)
+				+ Utah teapot
+				+ a platonic solid
+				+ other sidebar icons (include some of the unused ideas)
+				
+			+ pulls out blue ray (different from starting disc)
+			+ "Aha! Here we are."
+			+ flies back to center screen
+			+ "Now, you put it back."
+			+ holds it out towards screen. clicking on the disc changes the cursor into a hand holding a CD
+			+ clicking on the depression where it used to be inserts it back, restarting site animation
+			+ "Byeee!"
+			+ flies off stage right
+			
+			+ what should the character look like?
+				+ it needs to have wings
+				+ glowing clippy?
 TODO
 	Figure out why the sidebar is slightly longer than the pale sheet and make it not be.
 		- height: fit-content
