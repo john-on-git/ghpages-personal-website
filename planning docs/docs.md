@@ -111,6 +111,8 @@
 DONE
 	+ Figure out why the sidebar is slightly longer than the pale sheet and make it not be.
 		+ height: fit-content
+BUGS
+	+ It's possible to error out the blog and put the UI in an invalid state by spamming the buttons to go in and out of an article. 
 TODO
 	+ cache articles locally to speed up the loading
 	+ where should I host images? ohh why didn't I think of this

@@ -127,9 +127,11 @@
 
 .article-positioned-left {
     padding-right: 1rem;
+    float: left;
 }
 
 .article-positioned-right {
+    float: right;
     padding-left: 1rem;
 }
 .article-horizontal-block {
