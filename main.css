@@ -1,8 +1,20 @@
-#pale-sheet > div {
-    display: flex;
-    flex-flow: row wrap;
-    gap: 1rem;
+/*responively align the main content side-by-side if on a horizontally wide screen*/
+@media (orientation:landscape) {
+    #pale-sheet > div {
+        display: flex;
+        flex-flow: row wrap;
+        gap: 1rem;
+    }
+    /*also add the vertical bar*/
+    #about-me {
+        border-left: solid .15rem #0E0067;
+    }
 }
+@media (orientation:portrait) {
+    /*nothing needed*/
+}
+
+
 #pale-sheet > div > div {
     height: 100%;
     flex: 1;
@@ -53,31 +65,15 @@
     color:#0026FF
 }
 
-#main-content {
-    /*
-    position: relative;
-    top: 15vh;
-    left: 0;
-
-    width: 90%;
-    height: fit-content;
-    
-    font-size: 0;
-    */
-    display: flex;
-}
-
-
-
 #about-me {
     text-align: justify;
 
     padding-left: calc(1% - 3px);
-    border-left: solid .15rem #0E0067;
 
     display: flex;
     gap: 1rem;
 }
+
 #email {
     padding-top: 1rem;
     text-align: center;

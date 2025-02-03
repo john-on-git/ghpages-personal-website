@@ -115,7 +115,9 @@ BUGS
 	+ It's possible to error out the blog and put the UI in an invalid state by spamming the buttons to go in and out of an article. 
 TODO
 	+ cache articles locally to speed up the loading
-	+ where should I host images? ohh why didn't I think of this
+	+ layout doesn't work well on portrait screens, very long vertical columns look silly
+		+ Swap out for an alternative layout with JS?
+	+ where should I host images? ohhh why didn't I think of this
 	+ mitigate canvas flicker on article load https://stackoverflow.com/questions/15799564/flickering-during-resizing-of-html5-canvas
-	+ sidebar/pale-sheet height is still broken: check Galaxy S20 horizontal
+	+ sidebar/pale-sheet height is still broken: check Galaxy S20 horizontal (ehh kinda)
 	+ Make sure it's all accessible, disability compliant.
