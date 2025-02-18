@@ -41,7 +41,7 @@ class Automata {
 
         //resize the resolution of the canvas to have the aspect ratio it's being displayed at, while maintaining a reasonable resolution
         //for a canvas height/width is the resolution, NOT the deprecated html height/width 
-        this.canvas.width = Math.max(document.body.offsetWidth, 2560);
+        this.canvas.width = Math.max(document.body.offsetWidth * 1.15, 2560);
         this.canvas.height = canvas.width * (this.canvas.scrollHeight/this.canvas.scrollWidth);
 
 
@@ -298,16 +298,8 @@ const automata = new Automata(
 
 //resize the sidebar with js. 
 //after significant time-wasting, this doesn't seem to be possible with CSS for some reason :/
-const sidebar = document.getElementById("sidebar");
 const paleSheet = document.getElementById("pale-sheet");
 
-function calcSidebarHeight()
-{
-    //0.015 = 0.165vh - 0.15vh
-    return paleSheet.scrollHeight + (0.015 * document.body.offsetHeight) + "px";
-}
-
-//sidebar.style.height = calcSidebarHeight();
 
 //start drawing cellular automata
 function draw()
@@ -317,7 +309,6 @@ function draw()
 }
 draw();
 const resizeAll = () => {
-    //sidebar.style.height = calcSidebarHeight();
     automata.resize();
 };
 window.addEventListener("resize", resizeAll);
