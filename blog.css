@@ -1,7 +1,6 @@
 #title-fetch-error {
     display: none;
     text-align: center;
-    line-height: 0;
 }
 
 
@@ -9,11 +8,13 @@
     visibility: inherit;
     color: red;
     font-size: 4rem;
+    margin-bottom: 0;
 }
 
 #title-fetch-error > h3, #title-fetch-error > div, #title-fetch-error > p {
     visibility: inherit;
     color: #ff7575;
+    margin-top: 0;
 }
 
 #article-index > button {
