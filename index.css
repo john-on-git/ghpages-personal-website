@@ -56,16 +56,6 @@
     #no-featured-article-placeholder {
         font-size: 5vw;
     }
-    #featured-article-title > p {
-        position: absolute;
-        inset: 0;
-        margin: auto;
-        
-        height: fit-content;
-        width: fit-content;
-
-        font-size: 3rem;
-    }
     #featured-article-img {
         position: relative;
 
@@ -83,6 +73,7 @@
 
     #featured {
         position: relative;
+
         margin-bottom: 1rem;
     }
 
@@ -98,8 +89,14 @@
     
 }
 
-#featured {
-    position: relative;
+#featured a {
+    inset: 0;
+    margin: auto;
+
+    width: 80%;
+    height: 100%;
+    min-height: fit-content;
+
     text-align: center;
 }
 #featured > h2 {
@@ -108,18 +105,14 @@
     text-align: center;
 }
 #featured-article-title {
-    height: 25%;
-    position: relative;
+    height: fit-content;
 }
-#featured a {
-    position: absolute;
-    inset: 0;
-    margin: auto;
-
-    width: 80%;
-    height: 80%;
+#featured-article-title > p {
+    font-size: 3rem;
 }
 #featured img {
+    position: relative;
+    
     width: 50%;
 
     border: 1.5pt solid white;
