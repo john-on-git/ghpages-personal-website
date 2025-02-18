@@ -127,18 +127,14 @@
 .article-header > p, .article-header > h2{
     text-align: left;
 }
-#article-details-snippet-container {
-    width: 100%;
+
+#article-details-snippet-container img
+{
+    width: 20rem;
 }
-#article-details-snippet-container > img,
 #article-details-snippet-container figure {
     max-width: 50%;
-    height: 20rem;
     padding-bottom: 2rem;
-}
-#article-details-snippet-container figure > img {
-    max-width: 100%;
-    max-height: 100%;
 }
 
 #article-details-snippet-container p {
