@@ -42,10 +42,24 @@
     #article-grid {
         grid-template-columns: auto auto auto;
     }
+    
+
+    #article-details-snippet-container {
+        text-align: center;
+        margin-left: 10rem;
+        margin-right: 10rem;
+        padding-left: 1rem;
+    }
 }
 @media (orientation: portrait) {
     #article-grid {
         grid-template-columns: auto;
+    }
+    
+
+    #article-details-snippet-container {
+        text-align: center;
+        padding-left: 1rem;
     }
 }
 #article-grid > button, #button-article-details-back, #index-prev, #index-next  {
@@ -115,14 +129,9 @@
 .article-header > p, .article-header > h2{
     text-align: left;
 }
-
 #article-details-snippet-container {
-    text-align: center;
-    margin-left: 10rem;
-    margin-right: 10rem;
-    padding-left: 1rem;
+    width: 100%;
 }
-
 #article-details-snippet-container > img,
 #article-details-snippet-container figure {
     max-width: 50%;
