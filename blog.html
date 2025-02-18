@@ -2,49 +2,55 @@
 <html>
     <head>
         <title>John Site | Blog</title>
-		<meta charset="utf-8"/>
+		
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="initial-scale=1" />
+        
         <link rel="stylesheet" href="site.css">
         <link rel="stylesheet" href="blog.css">
+        
         <script src="site.js" defer></script>
         <script src="blog.js" defer></script>
     </head>
     <body>
         <canvas id="cellular-canvas"></canvas>
         <img hidden id="witch-title" src="asset/gibberish.png">
-        <div id="sidebar">
-            <a id="main-link" class="sidebar-link" href="index.html">Main</a>
-            <a id="blog-link" class="sidebar-link-inactive">Blog</a>
-            <a id="github-link" class="sidebar-link" href="https://github.com/John-on-git"><img id="github-logo" src="asset/GitHub_Lockup_Dark.png"></a>
-            <!--web neighbourhood, or webring back/forth-->
-            <div hidden class="random-symbol-grid">
-                <img class="" src="asset/symbols/peace.png">
-                <img class="" src="asset/symbols/yingyang.png">
-                <img class="spin" src="asset/symbols/angel_ray.png">
-                <img class="flip" src="asset/symbols/smile.png">
-            </div>
-        </div>
-        <div id="pale-sheet" class="notched">
-            <div hidden id="title-fetch-error">
-                <h2 hidden>Couldn't Get Articles</h2>
-                <h3 hidden>(the server is probably down)</h3>
-            </div>
-            <div id="article-index">
-                <h1 hidden id="no-articles">No articles found</h1>
-                <div id="article-grid">
-                    <!--JS adds... for article in articles-->
+        <div id="main-flex">
+            <div id="sidebar">
+                <a id="main-link" class="sidebar-link" href="index.html">Main</a>
+                <a id="blog-link" class="sidebar-link-inactive">Blog</a>
+                <a id="github-link" class="sidebar-link" href="https://github.com/John-on-git"><img id="github-logo" src="asset/GitHub_Lockup_Dark.png"></a>
+                <!--web neighbourhood, or webring back/forth-->
+                <div hidden class="random-symbol-grid">
+                    <img class="" src="asset/symbols/peace.png">
+                    <img class="" src="asset/symbols/yingyang.png">
+                    <img class="spin" src="asset/symbols/angel_ray.png">
+                    <img class="flip" src="asset/symbols/smile.png">
                 </div>
-                <button hidden id="index-prev">date++</button>
-                <button hidden id="index-next">date--</button>
             </div>
-            <div hidden id="article-details">
-                <div class="article-header">
-                    <button id="button-article-details-back">←</button>                
-                    <h2 id="article-details-title"></h2>
-                    <p>By <span id="article-details-authors"></span></p>
-                    <p>Last edited: <span id="article-details-posted-at"></span></p>
+            <div id="pale-sheet" class="notched">
+                <div hidden id="title-fetch-error">
+                    <h2 hidden>Couldn't Get Articles</h2>
+                    <h3 hidden>(the server is probably down)</h3>
                 </div>
-                <div id="article-details-snippet-container">
-                    <!--JS adds article content in here-->
+                <div id="article-index">
+                    <h1 hidden id="no-articles">No articles found</h1>
+                    <div id="article-grid">
+                        <!--JS adds... for article in articles-->
+                    </div>
+                    <button hidden id="index-prev">date++</button>
+                    <button hidden id="index-next">date--</button>
+                </div>
+                <div hidden id="article-details">
+                    <div class="article-header">
+                        <button id="button-article-details-back">←</button>                
+                        <h2 id="article-details-title"></h2>
+                        <p>By <span id="article-details-authors"></span></p>
+                        <p>Last edited: <span id="article-details-posted-at"></span></p>
+                    </div>
+                    <div id="article-details-snippet-container">
+                        <!--JS adds article content in here-->
+                    </div>
                 </div>
             </div>
         </div>

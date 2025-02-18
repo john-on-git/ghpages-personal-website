@@ -37,7 +37,7 @@ class Automata {
     resize()
     {
         this.canvas.style.height = (document.body.scrollHeight ) + "px";
-        this.canvas.style.width = (document.body.scrollWidth * .99) + "px";
+        this.canvas.style.width = (document.body.scrollWidth9) + "px";
 
         //resize the resolution of the canvas to have the aspect ratio it's being displayed at, while maintaining a reasonable resolution
         //for a canvas height/width is the resolution, NOT the deprecated html height/width 
