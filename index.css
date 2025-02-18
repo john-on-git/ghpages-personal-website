@@ -1,3 +1,13 @@
+#height-tester {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    width: 100px;
+    height: 100%;
+    background-color: red;
+}
+
 /*responively align the main content side-by-side if on a horizontally wide screen*/
 @media (orientation:landscape) {
     #pale-sheet > div {
@@ -5,30 +15,50 @@
         flex-flow: row wrap;
         gap: 1rem;
     }
+
+    #pale-sheet > div > div {
+        height: fit-content;
+        flex: 1;
+    }
     /*also add the vertical bar*/
     #about-me {
         border-left: solid .15rem #0E0067;
+
+        padding-left: calc(1% - 3px);
+    
+        display: flex;
+        gap: 1rem;
     }
+    
+    #about-me > div {
+        flex: 1;
+    }
+
+    #featured > p {
+        font-size: 5vw;
+        padding-top: 5vh;
+        padding-bottom: 5vh;
+    }
+    
 }
 @media (orientation:portrait) {
     /*nothing needed*/
-}
 
+    #featured {
+        position: relative;
+        margin-bottom: 1rem;
+    }
 
-#pale-sheet > div > div {
-    height: 100%;
-    flex: 1;
-}
-
-#featured {
-    position: relative;
-    width: 100%;
+    #featured > p {
+        font-size: 5vh;
+        padding-top: 5vh;
+        padding-bottom: 5vh;
+    }
     
-    margin-bottom: 1rem;
 }
+
 #featured > p {
-    font-size: 5vw;
-    height: 20vw;
+    height: 100%;
         
     text-align: center;
     align-content: center;
@@ -67,11 +97,6 @@
 
 #about-me {
     text-align: justify;
-
-    padding-left: calc(1% - 3px);
-
-    display: flex;
-    gap: 1rem;
 }
 
 #email {
@@ -79,9 +104,7 @@
     text-align: center;
     font-weight: bold;
 }
-#about-me > div {
-    flex: 1;
-}
+
 #headshot-flex-container {
     display: flex;
     width: 100%;

@@ -1,10 +1,4 @@
-html {
-    height: 100%;
-}
-body {
-    height: 100%;
-    min-height: 100%;
-}
+/*html + body sizing*/
 html, body, p {
     margin: 0;
     padding: 0;
@@ -26,27 +20,19 @@ body {
     background-image: url("asset/mockgrid.png");
     background-size: 3%;
     font-size: 0;
-}
 
+}
 canvas {
     position: absolute;
     top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     
     margin: 0;
     padding: 0;
 
     z-index: -1;
-}
-button:hover {
-    cursor: pointer;
-}
-
-.emoji-container {
-    display: inline;
-    vertical-align: middle;
-}
-.emoji-container > img {
-    height: 1rem;
 }
 
 #witch-title {
@@ -57,14 +43,40 @@ button:hover {
     height: 12.5%;
     filter: drop-shadow(0 0 1px #000000);
 }
-
-#sidebar {
+#main-flex {
     position: relative;
+    top: 15vh;
+
+    display: flex;
+    flex-direction: row;
+}
+
+#pale-sheet {
+    width: 80%;
+    min-height: 83.5vh;
+    
+    background-color: #F5F7F7E5;
+
+    font-size: 1rem;
+
+    box-sizing: border-box;
+    margin-top: 1.5vh;
+    
+    clip-path: polygon(
+        0 0,
+        0 100%,
+        100% 100%,
+        100% 2.5rem,
+        calc(100% - 2.5rem) 0
+    );
+}
+#sidebar {
+    display: flex;
+    flex-direction: column;
+    
+    bottom: 0;
     
     width: 15%;
-
-    top: 15vh;
-    height: 85vh;
     
     background-color: #636363;
 
@@ -75,9 +87,6 @@ button:hover {
 
     border-top: 1vmin ridge #C0C0C0;
     border-right: 1vmin ridge #C0C0C0;
-
-    display: inline-block;
-    vertical-align: top;
 }
 
 .sidebar-link {
@@ -153,60 +162,60 @@ button:hover {
     max-width: 75%;
 }
 
-#pale-sheet {
-    position: relative;
-    top: 16.5vh; /*should probably be margin-top, but margin-top is inexplicably a different size?*/
-
-    width: 80%;
-    height: fit-content;
-    min-height: 83.5%;
-    background-color: #F5F7F7E5;
-
-    font-size: 1rem;
-
-    box-sizing: border-box;
-    padding-top: 3%;
-    padding-left: 2%;
-    padding-right: 3%;
-    padding-bottom: 3%;
-    
-    clip-path: polygon(
-        0 0,
-        0 100%,
-        100% 100%,
-        100% 2.5rem,
-        calc(100% - 2.5rem) 0
-    );
-
-    display: inline-block;
-    vertical-align: top;
-}
-
-/*symbols and animation*/
-
 .random-symbol-grid {
-    position: absolute;
-    bottom: 5%;
-    width: 86%;
+    width: 100%;
+
+    margin-top: auto;
+    margin-bottom: 2rem;
     /*
     this makes it the same size as it'd be if statically positioned.
-    not totally sure why it's differnet, internet says it's something
+    not totally sure why it's different. the internet says it's something
     to do with the way absolute positioning interacts with margins/padding. 
     */
-
     display: grid;
-    grid-template-columns: auto auto;
     row-gap: 1rem;
     column-gap: 1rem;
 }
+@media (orientation:landscape) {
+    .random-symbol-grid {
+        position: absolute;
+        grid-template-columns: auto auto;
 
-.random-symbol-grid > img, .random-symbol-grid > div {
+        border: 0;
+    }
+}
 
+@media (orientation:portrait)
+{
+    .random-symbol-grid {
+        grid-template-columns: auto;
+    }
+    
+}
+
+/*symbols and animation*/
+.random-symbol-grid {
+    position: relative;
+}
+.random-symbol-grid > img {
     padding: 0;
     margin: 0;
-
+    
     width: 100%;
-    height: 100%;
+    height: auto;
+}
+
+
+button:hover {
+    cursor: pointer;
+}
+
+.emoji-container {
+    display: inline;
+    vertical-align: middle;
+}
+.emoji-container > img {
+    height: 1rem;
 }
 
 .flip {

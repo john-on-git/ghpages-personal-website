@@ -121,3 +121,4 @@ TODO
 	+ mitigate canvas flicker on article load https://stackoverflow.com/questions/15799564/flickering-during-resizing-of-html5-canvas
 	+ sidebar/pale-sheet height is still broken: check Galaxy S20 horizontal (ehh kinda)
 	+ Make sure it's all accessible, disability compliant.
+	+ Font Awesome SVG icons for symbols?

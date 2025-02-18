@@ -307,7 +307,7 @@ function calcSidebarHeight()
     return paleSheet.scrollHeight + (0.015 * document.body.offsetHeight) + "px";
 }
 
-sidebar.style.height = calcSidebarHeight();
+//sidebar.style.height = calcSidebarHeight();
 
 //start drawing cellular automata
 function draw()
@@ -317,7 +317,7 @@ function draw()
 }
 draw();
 const resizeAll = () => {
-    sidebar.style.height = calcSidebarHeight();
+    //sidebar.style.height = calcSidebarHeight();
     automata.resize();
 };
 window.addEventListener("resize", resizeAll);

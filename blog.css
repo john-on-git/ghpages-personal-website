@@ -31,11 +31,20 @@
 }
 #article-grid {
     display: grid;
-    grid-template-columns: auto auto auto;
-    grid-template-rows: 1fr auto;
     gap: 1.5vh;
     
     flex-grow: 1;
+}
+@media (orientation: landscape)
+{
+    #article-grid {
+        grid-template-columns: auto auto auto;
+    }
+}
+@media (orientation: portrait) {
+    #article-grid {
+        grid-template-columns: auto;
+    }
 }
 #article-grid > button, #button-article-details-back, #index-prev, #index-next  {
     color: #0E0067;
