@@ -62,17 +62,6 @@
         padding-left: 1rem;
     }
 }
-#article-grid > button, #button-article-details-back, #index-prev, #index-next  {
-    color: #0E0067;
-
-    border-left: 2px solid #0E0067;
-    border-bottom: 2px solid #0E0067;
-
-    border-top: 1px solid #bbb9c6;
-    border-right: 1px solid #bbb9c6;
-
-    background-color: #F5F7F7;
-}
 #article-grid > button:hover, #index-prev:hover, #index-next:hover {
     color:#0026FF;
     border-left: 2px solid #0026FF;
@@ -100,10 +89,9 @@
     height: 10vh;
 }
 
-#no-articles {
+#no-articles {    
     color: #b4afcf;
     font-size: 8rem;
-    text-align: center;
 }
 
 #button-article-details-back {
