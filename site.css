@@ -13,6 +13,10 @@ a:active {
     color: cyan;
 }
 
+h1, h2, h3, #email {
+    overflow-wrap: break-word;
+}
+
 body {
     color: #0E0067;
     font-family: 'Arial';
