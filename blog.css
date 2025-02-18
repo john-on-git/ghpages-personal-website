@@ -46,6 +46,9 @@
     #article-grid {
         grid-template-columns: auto;
     }
+    #article-grid > button {
+        max-height: fit-content;
+    }
 }
 #article-grid > button, #button-article-details-back, #index-prev, #index-next  {
     color: #0E0067;
