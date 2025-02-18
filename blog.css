@@ -81,9 +81,7 @@
 
 #article-grid > button {
     text-align: left;
-    height: 14vh;
-    
-    min-height: fit-content;
+    height: fit-content;
     padding: 1rem;
 }
 #article-grid > button > h2 {
