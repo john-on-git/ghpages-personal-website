@@ -47,9 +47,10 @@ const index = {
                 const url = typeof(offset)===Number ? this.endpoint : this.endpoint+"?offset="+offset;
                 const response = await fetch(url);
                 if(response.ok) {
-                    for(const article in await response.json()) //and add all to details cache
+                    const articles = await response.json();
+                    this.cached[offset] = articles.map(x=>x.id);
+                    for(const article in articles) //and add all to details cache
                     {
-                        this.cached[offset] = articles.map(x=>x.id);
                         details.cached[article.id] = article;
                     }
                 }
