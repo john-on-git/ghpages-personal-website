@@ -49,7 +49,7 @@ const index = {
                 if(response.ok) {
                     const articles = await response.json();
                     console.log(articles);
-                    for(const article in articles) //and add all to details cache
+                    for((_,article) in articles) //and add all to details cache
                     {
                         console.log(article);
                         details.cached[article.id] = article;
