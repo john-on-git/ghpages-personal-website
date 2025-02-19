@@ -24,7 +24,7 @@ const index = {
     buttonNext: document.getElementById("index-next"),
     noArticles: document.getElementById("no-articles"),
     
-    cached: {}, //any index pages that've previously been fetched this clientside session
+    cached: {}, //ids of any articles that've previously been fetched this clientside session
     
     async use(offset) {
         //show index, hide details
@@ -47,9 +47,9 @@ const index = {
                 const url = typeof(offset)===Number ? this.endpoint : this.endpoint+"?offset="+offset;
                 const response = await fetch(url);
                 if(response.ok) {
-                    this.cached[offset] = await response.json();
-                    for(const article in this.cached[offset]) //and add all to details cache
+                    for(const article in await response.json()) //and add all to details cache
                     {
+                        this.cached[offset] = articles.map(x=>x.id);
                         details.cached[article.id] = article;
                     }
                 }
@@ -57,33 +57,33 @@ const index = {
                     throw new Error(response.status);
                 }
             }
-            const articles = this.cached[offset];
  
             recursiveSetVisibility(this.errorDisplay, false);
 
-            for(let i = 0;i<articles.length;i++) {            
+            for(let i = 0;i<articles.length;i++) {
+                const article = details.cached[articles[i].id];      
                 //construct snippet for article
                 const snippet = document.createElement("button");
                 snippet.addEventListener("click", async () => {
                     window.history.replaceState(
                         null,
                         "",
-                        "blog.html?id="+articles[i].id +
+                        "blog.html?id="+article.id +
                         (offset===null || offset===0 ? "" : "&offset="+offset)
                     );
                     updateView();
                 });
                 
                 const title = document.createElement("h2");
-                title.innerText = articles[i].title;
+                title.innerText = article.title;
                 snippet.appendChild(title);
     
                 const authors = document.createElement("p");
-                authors.innerText = "by " + articles[i].authors;
+                authors.innerText = "by " + article.authors;
                 snippet.appendChild(authors);
                 
                 const postedAt = document.createElement("p");
-                postedAt.innerText = articles[i].postedAt.substring(0,10);
+                postedAt.innerText = article.postedAt.substring(0,10);
                 snippet.appendChild(postedAt);
     
                 this.grid.appendChild(snippet);
