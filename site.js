@@ -289,8 +289,7 @@ class Automata {
 document.body.style["background-image"] = "none";
 
 //set up canvas and automata
-const isPortrait = window.matchMedia("orientation: portrait").matches;
-console.log(isPortrait);
+const isPortrait = window.matchMedia("(orientation: portrait)").matches;
 const canvas = document.getElementById("cellular-canvas");
 const automata = new Automata(
     (isPortrait ? 500 : 100), //phones have higher DPI. can't query actual screen DPI. there must a better way to do this
