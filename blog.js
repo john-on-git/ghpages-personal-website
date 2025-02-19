@@ -228,7 +228,7 @@ document.getElementById("button-article-details-back").addEventListener(
 async function preload(change) {
     try {
         const currentURL = new URLSearchParams(window.location.search);
-        let offset = url.get("offset");
+        let offset = currentURL.get("offset");
         offset = offset===null ? 0 : parseInt(offset);
         if(offset>=0) {
             if(!(offset in index.cached)) {
