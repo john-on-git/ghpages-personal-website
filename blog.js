@@ -60,6 +60,7 @@ const index = {
  
             recursiveSetVisibility(this.errorDisplay, false);
 
+            const articles = this.cached[offset];
             for(let i = 0;i<articles.length;i++) {
                 const article = details.cached[articles[i].id];      
                 //construct snippet for article
