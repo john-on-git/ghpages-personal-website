@@ -286,7 +286,7 @@ document.getElementById("index-prev").addEventListener(
         let offset = new URLSearchParams(window.location.search).get("offset");
         offset = offset===null ? 0 : parseInt(offset);
         if(offset>0) {
-            setTimeout(2500, () => {preload(-1);});
+            setTimeout(() => {preload(-1);}, 2500);
         }
     }
 );
@@ -294,7 +294,7 @@ document.getElementById("index-next").addEventListener(
     "click",
     () => {
         moveOnClick(1);
-        setTimeout(2500, () => {preload(-1);});
+        setTimeout(() => {preload(1);}, 2500);
     }
 );
 updateView();
@@ -303,6 +303,6 @@ updateView();
 let offset = new URLSearchParams(window.location.search).get("offset");
 offset = offset===null ? 0 : parseInt(offset);
 if(offset>0) {
-    setTimeout(2500, () => {preload(-1);});
+    setTimeout(() => {preload(-1);}, 2500);
 }
-setTimeout(5000, () => {preload(1);});
+setTimeout(() => {preload(1);}, 5000);
