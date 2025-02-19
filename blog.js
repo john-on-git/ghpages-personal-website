@@ -53,7 +53,7 @@ const index = {
                         details.cached[article.id] = article;
                     }
                     this.cached[offset] = articles.map(x=>x.id);
-                    console.log(this.cached[offset]);
+                    console.log("56 this.cached[offset]", this.cached[offset]);
                 }
                 else {
                     throw new Error(response.status);
@@ -63,10 +63,10 @@ const index = {
             recursiveSetVisibility(this.errorDisplay, false);
 
             const articles = this.cached[offset];
-            console.log(articles);
+            console.log("66 articles", articles);
             for(let i = 0;i<articles.length;i++) {
                 const article = details.cached[articles[i].id];
-                console.log(article);
+                console.log("69 article", article, details.cached);
                 //construct snippet for article
                 const snippet = document.createElement("button");
                 snippet.addEventListener("click", async () => {
