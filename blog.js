@@ -228,7 +228,8 @@ document.getElementById("button-article-details-back").addEventListener(
 async function preload(change) {
     try {
         const currentURL = new URLSearchParams(window.location.search);
-        const offset = parseInt(currentURL.get("offset"))+change;
+        let offset = url.get("offset");
+        offset = offset===null ? 0 : parseInt(offset);
         if(offset>=0) {
             if(!(offset in index.cached)) {
                 console.log("requesting index ?offset=",offset);
@@ -297,6 +298,8 @@ document.getElementById("index-next").addEventListener(
 updateView();
 
 //preload immediately
+let offset = url.get("offset");
+offset = offset===null ? 0 : parseInt(offset);
 if(offset>0) {
     preload(-1);
 }
