@@ -47,6 +47,7 @@ const index = {
                 const response = await fetch(url);
                 if(response.ok) {
                     this.cached[offset] = await response.json();
+                    console.log("added to index cache");
                 }
                 else {
                     throw new Error(response.status);
@@ -150,6 +151,7 @@ const details = {
                 const response = await fetch(url);
                 if(response.ok) {
                     this.cached[id] = await response.json();
+                    console.log("added to details cache");
                 }
                 else {
                     throw new Error(response.status);
@@ -157,27 +159,21 @@ const details = {
             }
             const article = this.cached[id];
 
-            if(response.ok) {
-                
-                //update details elements with data
-                this.title.innerText = article.title;
-                this.authors.innerText = article.authors;
-                this.postedAt.innerText = article.postedAt.substring(0,10);
-                this.snippetContainer.innerHTML = article.htmlSnippet;
-                
-                //update the view once everything's had time to load
-                
-                //hide index
-                recursiveSetVisibility(index.root, false);
-                index.root.style.display = "none";
-        
-                //show details
-                recursiveSetVisibility(details.root, true);
-                this.root.style.display = "block";
-            }
-            else {
-                throw new Error(response.status);
-            }
+            //update details elements with data
+            this.title.innerText = article.title;
+            this.authors.innerText = article.authors;
+            this.postedAt.innerText = article.postedAt.substring(0,10);
+            this.snippetContainer.innerHTML = article.htmlSnippet;
+            
+            //update the view once everything's had time to load
+            
+            //hide index
+            recursiveSetVisibility(index.root, false);
+            index.root.style.display = "none";
+    
+            //show details
+            recursiveSetVisibility(details.root, true);
+            this.root.style.display = "block";
         }
         catch(e) {
             console.error("Blog: failed fetching article.", e);
