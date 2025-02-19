@@ -229,7 +229,7 @@ async function preload(change) {
     try {
         const currentURL = new URLSearchParams(window.location.search);
         let offset = currentURL.get("offset");
-        offset = offset===null ? 0 : parseInt(offset);
+        offset = offset===null ? 0 : parseInt(offset)+change;
         if(offset>=0) {
             if(!(offset in index.cached)) {
                 console.log("requesting index ?offset=",offset);
