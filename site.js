@@ -45,7 +45,6 @@ class Automata {
         //(the eventlistener is sometimes called errouneously when scrolling on mobile)
         if(document.body.offsetHeight!=this.currentlySizedFor.height || document.body.offsetWidth!=this.currentlySizedFor.width)
         {
-            alert("really resized", document.body.offsetHeight, document.body.offsetWidth);
             this.currentlySizedFor.height = document.body.offsetHeight;
             this.currentlySizedFor.width = document.body.offsetWidth;
 
@@ -221,14 +220,12 @@ class Automata {
 
         for(let j=0; j<this.height;j++)
         {
-            const point = {
-                "x": undefined,
-                "y": this.margins.height + (j*this.verticalHeight)
-            };
+            const x = undefined;
+            const y = this.margins.height + (j*this.verticalHeight);
             for(let i=0; i<this.width;i++)
             {
                 //dots
-                point.x = this.margins.width + ((i)*this.scale) + (j%2===0 ? 0 : this.scale/2);
+                x = this.margins.width + ((i)*this.scale) + (j%2===0 ? 0 : this.scale/2);
 
                 //lines (cell contents)
                 //every other cell, look at the neighbours in the bottom-right half, these haven't been processed yet.
@@ -240,10 +237,10 @@ class Automata {
                     {
                         
                         this.ctx.beginPath();
-                        this.ctx.moveTo(point.x, point.y);
+                        this.ctx.moveTo(x, y);
                         this.ctx.lineTo(
-                            point.x + this.scale,
-                            point.y);
+                            x + this.scale,
+                            y);
                         this.ctx.stroke();
                     }
 
@@ -257,10 +254,10 @@ class Automata {
                     )
                     {
                         this.ctx.beginPath();
-                        this.ctx.moveTo(point.x, point.y);
+                        this.ctx.moveTo(x, y);
                         this.ctx.lineTo(
-                            point.x - (this.scale/2),
-                            point.y+this.verticalHeight
+                            x - (this.scale/2),
+                            y+this.verticalHeight
                         );
                         this.ctx.stroke();
                     }
@@ -275,10 +272,10 @@ class Automata {
                     )
                     {
                         this.ctx.beginPath();
-                        this.ctx.moveTo(point.x, point.y);
+                        this.ctx.moveTo(x, y);
                         this.ctx.lineTo(
-                            point.x + (this.scale/2),
-                            point.y+this.verticalHeight
+                            x + (this.scale/2),
+                            y+this.verticalHeight
                         );
                         this.ctx.stroke();
                     }
@@ -286,8 +283,8 @@ class Automata {
                 //draw dot
                 this.ctx.beginPath();
                 this.ctx.arc(
-                    point.x,
-                    point.y,
+                    x,
+                    y,
                     
                     this.scale * .05,
                     0,
