@@ -48,13 +48,12 @@ const index = {
                 const response = await fetch(url);
                 if(response.ok) {
                     const articles = await response.json();
-                    console.log(articles);
                     for(const [_,article] of Object.entries(articles)) //and add all to details cache
                     {
-                        console.log(article);
                         details.cached[article.id] = article;
                     }
                     this.cached[offset] = articles.map(x=>x.id);
+                    console.log(this.cached[offset]);
                 }
                 else {
                     throw new Error(response.status);
@@ -64,6 +63,7 @@ const index = {
             recursiveSetVisibility(this.errorDisplay, false);
 
             const articles = this.cached[offset];
+            console.log(articles);
             for(let i = 0;i<articles.length;i++) {
                 const article = details.cached[articles[i].id];
                 console.log(article);
