@@ -48,12 +48,12 @@ const index = {
                 const response = await fetch(url);
                 if(response.ok) {
                     const articles = await response.json();
-                    this.cached[offset] = articles.map(x=>x.id);
                     for(const article in articles) //and add all to details cache
                     {
                         console.log(article);
                         details.cached[article.id] = article;
                     }
+                    this.cached[offset] = articles.map(x=>x.id);
                 }
                 else {
                     throw new Error(response.status);
