@@ -6,7 +6,6 @@
     //set up data caching
 
 const API_LOCATION = "https://blueblog.api.fourscore.dev";
-
 function recursiveSetVisibility(node, bool) {
     node.hidden = !bool;
     for(let i=0;i<node.children.length;i++) { //doesn't work with foreach (bc it makes a copy?)
@@ -25,6 +24,8 @@ const index = {
     buttonNext: document.getElementById("index-next"),
     noArticles: document.getElementById("no-articles"),
     
+    cached: {}, //any index pages that've previously been fetched this clientside session
+    
     async use(offset) {
         //show index, hide details
         recursiveSetVisibility(this.root, true);
@@ -39,75 +40,82 @@ const index = {
         }
     
         try {
-            const url = typeof(offset)===Number ? this.endpoint : this.endpoint+"?offset="+offset; 
-            const response = await fetch(url);
-            if(response.ok) {
-                recursiveSetVisibility(this.errorDisplay, false);
-                const articles = await response.json();
-                for(let i = 0;i<articles.length;i++) {            
-                    //construct snippet for article
-                    const snippet = document.createElement("button");
-                    snippet.addEventListener("click", async () => {
-                        window.history.replaceState(
-                            null,
-                            "",
-                            "blog.html?id="+articles[i].id +
-                            (offset===null || offset===0 ? "" : "&offset="+offset)
-                        );
-                        updateView();
-                    });
-                    
-                    const title = document.createElement("h2");
-                    title.innerText = articles[i].title;
-                    snippet.appendChild(title);
-        
-                    const authors = document.createElement("p");
-                    authors.innerText = "by " + articles[i].authors;
-                    snippet.appendChild(authors);
-                    
-                    const postedAt = document.createElement("p");
-                    postedAt.innerText = articles[i].postedAt.substring(0,10);
-                    snippet.appendChild(postedAt);
-        
-                    this.grid.appendChild(snippet);
-                }
-        
-                //update the view once everything's had time to load
-        
-                if((offset===null || offset===0) && articles.length===0) {
-                    recursiveSetVisibility(this.noArticles, true);
-                    this.noArticles.style.display = "block";
+            //get & cache the data from the server if it isn't already cached
+            if(!offset in this.cached)
+            {
+                const url = typeof(offset)===Number ? this.endpoint : this.endpoint+"?offset="+offset;
+                const response = await fetch(url);
+                if(response.ok) {
+                    this.cached[offset] = await response.json();
                 }
                 else {
-                    
-                    recursiveSetVisibility(this.noArticles, false);
-                    this.noArticles.style.display = "none";
-                }
-
-                //hide buttons
-                //if on first page, hide prev
-                if(offset<=0) {
-                    recursiveSetVisibility(this.buttonPrev, false);
-                    this.buttonPrev.style.display = "none";
-                }
-                else {
-                    recursiveSetVisibility(this.buttonPrev, true);
-                    this.buttonPrev.style.display = "block";
-                }
-                //if this is the last page (no more results), hide next
-                if(articles.length<this.articlesPerPage)
-                {
-                    recursiveSetVisibility(this.buttonNext, false);
-                    this.buttonNext.style.display = "none";
-                }
-                else
-                {
-                    recursiveSetVisibility(this.buttonPrev, true);
-                    this.buttonNext.style.display = "block";
+                    throw new Error(response.status);
                 }
             }
+            const articles = this.cached[offset];
+ 
+            recursiveSetVisibility(this.errorDisplay, false);
+
+            for(let i = 0;i<articles.length;i++) {            
+                //construct snippet for article
+                const snippet = document.createElement("button");
+                snippet.addEventListener("click", async () => {
+                    window.history.replaceState(
+                        null,
+                        "",
+                        "blog.html?id="+articles[i].id +
+                        (offset===null || offset===0 ? "" : "&offset="+offset)
+                    );
+                    updateView();
+                });
+                
+                const title = document.createElement("h2");
+                title.innerText = articles[i].title;
+                snippet.appendChild(title);
+    
+                const authors = document.createElement("p");
+                authors.innerText = "by " + articles[i].authors;
+                snippet.appendChild(authors);
+                
+                const postedAt = document.createElement("p");
+                postedAt.innerText = articles[i].postedAt.substring(0,10);
+                snippet.appendChild(postedAt);
+    
+                this.grid.appendChild(snippet);
+            }
+    
+            //update the view once everything's had time to load
+    
+            if((offset===null || offset===0) && articles.length===0) {
+                recursiveSetVisibility(this.noArticles, true);
+                this.noArticles.style.display = "block";
+            }
             else {
-                throw new Error(response.status);
+                
+                recursiveSetVisibility(this.noArticles, false);
+                this.noArticles.style.display = "none";
+            }
+
+            //hide buttons
+            //if on first page, hide prev
+            if(offset<=0) {
+                recursiveSetVisibility(this.buttonPrev, false);
+                this.buttonPrev.style.display = "none";
+            }
+            else {
+                recursiveSetVisibility(this.buttonPrev, true);
+                this.buttonPrev.style.display = "block";
+            }
+            //if this is the last page (no more results), hide next
+            if(articles.length<this.articlesPerPage)
+            {
+                recursiveSetVisibility(this.buttonNext, false);
+                this.buttonNext.style.display = "none";
+            }
+            else
+            {
+                recursiveSetVisibility(this.buttonPrev, true);
+                this.buttonNext.style.display = "block";
             }
         }
         catch(e) {
@@ -131,12 +139,25 @@ const details = {
     postedAt: document.getElementById("article-details-posted-at"),
     snippetContainer: document.getElementById("article-details-snippet-container"),
     
+    cached: {}, //any articles that've previously been fetched this clientside session
+
     async use(id) {
-        const url = this.endpoint + id; 
         try {
-            const response = await fetch(url);
+            //get & cache the data from the server if it isn't already cached
+            if(!id in this.cached)
+            {
+                const url = this.endpoint + id;
+                const response = await fetch(url);
+                if(response.ok) {
+                    this.cached[id] = await response.json();
+                }
+                else {
+                    throw new Error(response.status);
+                }
+            }
+            const article = this.cached[id];
+
             if(response.ok) {
-                const article = await response.json();
                 
                 //update details elements with data
                 this.title.innerText = article.title;
