@@ -36,8 +36,8 @@ class Automata {
     //function to resize the canvas and automata to fit the screen
     resize()
     {
-        this.canvas.style.height = (document.body.scrollHeight) + "pt";
-        this.canvas.style.width = (document.body.scrollWidth) + "pt";
+        this.canvas.style.height = (document.body.scrollHeight) + "px";
+        this.canvas.style.width = (document.body.scrollWidth) + "px";
 
         //resize the resolution of the canvas to have the aspect ratio it's being displayed at, while maintaining a reasonable resolution
         //for a canvas height/width is the resolution, NOT the deprecated html height/width 
@@ -56,7 +56,7 @@ class Automata {
         this.margins.height = (canvas.height - (((this.height-1) * this.verticalHeight)))/2;
             
         //canvas config is reset upon resizing the canvas, so it must be set again
-        this.ctx.lineWidth = 4;
+        this.ctx.lineWidth = this.scale/25;
         this.ctx.fillStyle = "#0E0067";
         this.ctx.strokeStyle = "#0026FFC0";
 
@@ -289,9 +289,11 @@ class Automata {
 document.body.style["background-image"] = "none";
 
 //set up canvas and automata
+const isPortrait = window.matchMedia("orientation: portrait").matches;
+console.log(isPortrait);
 const canvas = document.getElementById("cellular-canvas");
 const automata = new Automata(
-    100,
+    (isPortrait ? 500 : 100), //phones have higher DPI. can't query actual screen DPI. there must a better way to do this
     canvas
 );
 
