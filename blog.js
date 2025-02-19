@@ -225,7 +225,7 @@ document.getElementById("button-article-details-back").addEventListener(
     }
 );
 
-async function preloadOnHover(change) {
+async function preload(change) {
     try {
         const currentURL = new URLSearchParams(window.location.search);
         const offset = parseInt(currentURL.get("offset"))+change;
@@ -268,13 +268,13 @@ function moveOnClick(change) {
 document.getElementById("index-prev").addEventListener(
     "mouseover",
     async () => {
-        preloadOnHover(-1);
+        //preload(-1);
     }
 );
 document.getElementById("index-next").addEventListener(
     "mouseover",
     async () => {
-        preloadOnHover(1);
+        //preload(1);
     }
 );
 
@@ -282,12 +282,22 @@ document.getElementById("index-prev").addEventListener(
     "click",
     () => {
         moveOnClick(-1);
+        if(offset>0) {
+            preload(-1);
+        }
     }
 );
 document.getElementById("index-next").addEventListener(
     "click",
     () => {
         moveOnClick(1);
+        preload(1);
     }
 );
 updateView();
+
+//preload immediately
+if(offset>0) {
+    preload(-1);
+}
+preload(1);
