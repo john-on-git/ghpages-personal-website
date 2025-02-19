@@ -48,6 +48,7 @@ const index = {
                 const response = await fetch(url);
                 if(response.ok) {
                     const articles = await response.json();
+                    console.log(articles);
                     for(const article in articles) //and add all to details cache
                     {
                         console.log(article);
