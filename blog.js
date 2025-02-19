@@ -298,7 +298,7 @@ document.getElementById("index-next").addEventListener(
 updateView();
 
 //preload immediately
-let offset = url.get("offset");
+let offset = new URLSearchParams(window.location.search).get("offset");
 offset = offset===null ? 0 : parseInt(offset);
 if(offset>0) {
     preload(-1);
