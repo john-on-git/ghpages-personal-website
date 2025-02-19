@@ -41,10 +41,11 @@ const index = {
     
         try {
             //get & cache the data from the server if it isn't already cached
-            if(!offset in this.cached)
+            if(!(offset in this.cached))
             {
                 const url = typeof(offset)===Number ? this.endpoint : this.endpoint+"?offset="+offset;
                 const response = await fetch(url);
+                console.log("got response");
                 if(response.ok) {
                     this.cached[offset] = await response.json();
                     console.log("added to index cache");
@@ -53,6 +54,7 @@ const index = {
                     throw new Error(response.status);
                 }
             }
+            console.log("offset in this.cached==",offset in this.cached, "\n!offset in this.cached==", !offset in this.cached);
             const articles = this.cached[offset];
  
             recursiveSetVisibility(this.errorDisplay, false);
@@ -145,7 +147,7 @@ const details = {
     async use(id) {
         try {
             //get & cache the data from the server if it isn't already cached
-            if(!id in this.cached)
+            if(!(id in this.cached))
             {
                 const url = this.endpoint + id;
                 const response = await fetch(url);
