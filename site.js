@@ -47,6 +47,9 @@ class Automata {
     //function to resize the canvas and automata to fit the screen
     resize()
     {
+        //TODO
+        //    1. margins are currently broken. doesn't really affect the look: not worth fixing imo
+
         //if the height actually changed, update the display
         //(the eventlistener is sometimes called errouneously when scrolling on mobile)
         if(document.body.offsetHeight!=this.currentlySizedFor.height || document.body.offsetWidth!=this.currentlySizedFor.width)

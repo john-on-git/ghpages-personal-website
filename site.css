@@ -197,6 +197,11 @@ canvas {
     .random-symbol-grid {
         grid-template-columns: auto;
     }
+
+    #sidebar > p, #sidebar > a {
+        transform: rotate(90deg);
+        padding-top: 50%;
+    }
     
 }
 
