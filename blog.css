@@ -50,16 +50,23 @@
         margin-right: 10rem;
         padding-left: 1rem;
     }
+    
+    #article-details-snippet-container img
+    {
+        max-width: 20rem;
+    }
 }
 @media (orientation: portrait) {
     #article-grid {
         grid-template-columns: auto;
     }
     
-
     #article-details-snippet-container {
         text-align: center;
         padding-left: 1rem;
+    }
+    #article-details-snippet-container img {
+        width: 100%;
     }
 }
 #article-grid > button:hover, #index-prev:hover, #index-next:hover {
@@ -116,10 +123,6 @@
     text-align: left;
 }
 
-#article-details-snippet-container img
-{
-    width: 20rem;
-}
 #article-details-snippet-container figure {
     max-width: 50%;
     padding-bottom: 2rem;
