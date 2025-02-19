@@ -77,6 +77,9 @@
         padding-bottom: 1rem;
         border-bottom: .15rem solid#0E0067;
     }
+    #featured-article-title {
+        margin: 1.5rem;
+    }
 }
 #featured {
     text-align: center;
