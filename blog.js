@@ -225,9 +225,9 @@ document.getElementById("button-article-details-back").addEventListener(
     }
 );
 
-async function preloadOnHover(direction) {
+async function preloadOnHover(change) {
     try {
-        const offset = url.get("offset")+direction;
+        const offset = url.get("offset")+change;
         if(offset>=0) {
             if(!(offset in this.cached)) {
                 console.log("requesting index ?offset=",offset);
@@ -251,6 +251,18 @@ async function preloadOnHover(direction) {
         console.error("Blog: failed fetching articles.", e);
     }
 }
+function moveOnClick(change) {
+    const url = new URLSearchParams(window.location.search);
+    let offset = url.get("offset");
+    offset = offset===null ? 0 : parseInt(offset);
+
+    window.history.replaceState( //navigate back to main
+        null,
+        "",
+        "blog.html?offset=" + (offset+direction)
+    );
+    updateView(); //redraw view
+}
 
 document.getElementById("index-prev").addEventListener(
     "hover",
@@ -265,34 +277,16 @@ document.getElementById("index-next").addEventListener(
     }
 );
 
-document.getElementById("index-next").addEventListener(
+document.getElementById("index-prev").addEventListener(
     "click",
     () => {
-        const url = new URLSearchParams(window.location.search);
-        let offset = url.get("offset");
-        offset = offset===null ? 0 : parseInt(offset);
-
-        window.history.replaceState( //navigate back to main
-            null,
-            "",
-            "blog.html?offset=" + (offset+1)
-        );
-        updateView(); //redraw view
+        preloadOnHover(-1);
     }
 );
 document.getElementById("index-next").addEventListener(
     "click",
     () => {
-        const url = new URLSearchParams(window.location.search);
-        let offset = url.get("offset");
-        offset = offset===null ? 0 : parseInt(offset);
-
-        window.history.replaceState( //navigate back to main
-            null,
-            "",
-            "blog.html?offset=" + (offset+1)
-        );
-        updateView(); //redraw view
+        preloadOnHover(1);
     }
 );
 updateView();
