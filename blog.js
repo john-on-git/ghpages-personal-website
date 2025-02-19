@@ -65,7 +65,7 @@ const index = {
             const articles = this.cached[offset];
             console.log("66 articles", articles);
             for(let i = 0;i<articles.length;i++) {
-                const article = details.cached[articles[i].id];
+                const article = details.cached[articles[i]];
                 console.log("69 article", article, details.cached);
                 //construct snippet for article
                 const snippet = document.createElement("button");
