@@ -227,12 +227,13 @@ document.getElementById("button-article-details-back").addEventListener(
 
 async function preloadOnHover(change) {
     try {
-        const offset = url.get("offset")+change;
+        const currentURL = new URLSearchParams(window.location.search);
+        const offset = currentURL.get("offset")+change;
         if(offset>=0) {
             if(!(offset in index.cached)) {
                 console.log("requesting index ?offset=",offset);
-                const url = typeof(offset)===Number ? index.endpoint : index.endpoint+"?offset="+offset;
-                const response = await fetch(url);
+                const APIURL = typeof(offset)===Number ? index.endpoint : index.endpoint+"?offset="+offset;
+                const response = await fetch(APIURL);
                 if(response.ok) {
                     const articles = await response.json();
                     for(const [_,article] of Object.entries(articles)) //and add all to details cache
