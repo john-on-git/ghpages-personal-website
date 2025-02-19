@@ -228,7 +228,7 @@ document.getElementById("button-article-details-back").addEventListener(
 async function preloadOnHover(change) {
     try {
         const currentURL = new URLSearchParams(window.location.search);
-        const offset = currentURL.get("offset")+change;
+        const offset = parseInt(currentURL.get("offset"))+change;
         if(offset>=0) {
             if(!(offset in index.cached)) {
                 console.log("requesting index ?offset=",offset);
@@ -260,7 +260,7 @@ function moveOnClick(change) {
     window.history.replaceState( //navigate back to main
         null,
         "",
-        "blog.html?offset=" + (offset+direction)
+        "blog.html?offset=" + (offset+change)
     );
     updateView(); //redraw view
 }
