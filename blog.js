@@ -283,6 +283,8 @@ document.getElementById("index-prev").addEventListener(
     "click",
     () => {
         moveOnClick(-1);
+        let offset = new URLSearchParams(window.location.search).get("offset");
+        offset = offset===null ? 0 : parseInt(offset);
         if(offset>0) {
             preload(-1);
         }
