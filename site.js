@@ -53,7 +53,7 @@ class Automata {
 
             //resize the resolution of the canvas to have the aspect ratio it's being displayed at, while maintaining a reasonable resolution
             //for a canvas height/width is the resolution, NOT the deprecated html height/width 
-            this.canvas.width = Math.max(document.body.offsetWidth, 2560);
+            this.canvas.width = Math.max(document.body.offsetWidth);
             this.canvas.height = canvas.width * (this.canvas.scrollHeight/this.canvas.scrollWidth);
 
 
