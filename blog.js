@@ -51,6 +51,7 @@ const index = {
                     this.cached[offset] = articles.map(x=>x.id);
                     for(const article in articles) //and add all to details cache
                     {
+                        console.log(article);
                         details.cached[article.id] = article;
                     }
                 }
