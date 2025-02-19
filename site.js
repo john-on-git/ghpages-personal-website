@@ -22,17 +22,23 @@ class Recovering {
 class Automata {
     constructor(scale, canvas)
     {
-        this.scale = scale; //controls the size of the cells in pixels. should be inches to support high DPI displays, something for later
-        this.margins = {"width": undefined, "height": undefined};
+        this.baseScale = scale; //controls the size of the cells as a percentage of the total
         this.canvas = canvas;
 
         this.data = [];
-        this.verticalHeight = Math.sqrt(this.scale**2 - (this.scale/2)**2); //find the vertical height of the triangle with side length this.scale. Pythagoras we love you
         this.ctx = this.canvas.getContext("2d"); 
 
+        //properties that depend on resize()
+        this.isPortrait = undefined;
         this.currentlySizedFor = {
-            height: null,
-            width: null
+            height: undefined,
+            width: undefined
+        };
+        this.scale = undefined;
+        this.verticalHeight = undefined; //find the vertical height of the triangle with side length this.scale. Pythagoras we love you
+        this.margins = { 
+            height: undefined,
+            width: undefined
         };
 
         this.resize();
@@ -45,6 +51,7 @@ class Automata {
         //(the eventlistener is sometimes called errouneously when scrolling on mobile)
         if(document.body.offsetHeight!=this.currentlySizedFor.height || document.body.offsetWidth!=this.currentlySizedFor.width)
         {
+            this.isPortrait = window.matchMedia("(orientation: portrait)").matches;
             this.currentlySizedFor.height = document.body.offsetHeight;
             this.currentlySizedFor.width = document.body.offsetWidth;
 
@@ -53,8 +60,11 @@ class Automata {
 
             //resize the resolution of the canvas to have the aspect ratio it's being displayed at, while maintaining a reasonable resolution
             //for a canvas height/width is the resolution, NOT the deprecated html height/width 
-            this.canvas.width = Math.max(document.body.offsetWidth);
+            this.canvas.width = this.isPortrait ? 500 : 2560; //bigger on desktop
             this.canvas.height = canvas.width * (this.canvas.scrollHeight/this.canvas.scrollWidth);
+
+            this.scale = this.baseScale / 100 * this.canvas.width;
+            this.verticalHeight = Math.sqrt(this.scale**2 - (this.scale/2)**2); //find the vertical height of the triangle with side length this.scale. Pythagoras we love you
 
 
             //size the cellular automata grid to the display
@@ -64,8 +74,8 @@ class Automata {
             this.height = Math.floor(this.canvas.height / this.verticalHeight); //should be based on screen aspect ratio
 
             //calculate margin size. the display is filled with as many cells as possible, then the margins are the remaining space
-            this.margins.width = (canvas.width - ((this.width-.5) * this.scale))/2;
-            this.margins.height = (canvas.height - (((this.height-1) * this.verticalHeight)))/2;
+            this.margins.width = (this.canvas.width - ((this.width-.5) * this.scale))/2;
+            this.margins.height = (this.canvas.height - (((this.height-1) * this.verticalHeight)))/2;
                 
             //canvas config is reset upon resizing the canvas, so it must be set again
             this.ctx.lineWidth = this.scale/25;
@@ -220,13 +230,11 @@ class Automata {
 
         for(let j=0; j<this.height;j++)
         {
-            const x = undefined;
             const y = this.margins.height + (j*this.verticalHeight);
             for(let i=0; i<this.width;i++)
             {
                 //dots
-                x = this.margins.width + ((i)*this.scale) + (j%2===0 ? 0 : this.scale/2);
-
+                const x = this.margins.width + ((i)*this.scale) + (j%2===0 ? 0 : this.scale/2);
                 //lines (cell contents)
                 //every other cell, look at the neighbours in the bottom-right half, these haven't been processed yet.
                 //draw the linking line if both cells are On
@@ -303,7 +311,7 @@ document.body.style["background-image"] = "none";
 const isPortrait = window.matchMedia("(orientation: portrait)").matches;
 const canvas = document.getElementById("cellular-canvas");
 const automata = new Automata(
-    (isPortrait ? 500 : 100), //phones have higher DPI. can't query actual screen DPI. there must a better way to do this
+    (isPortrait ? 20 : 5), //phones have higher DPI. can't query actual screen DPI. there must a better way to do this
     canvas
 );
 
