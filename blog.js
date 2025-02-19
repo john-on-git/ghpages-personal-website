@@ -224,7 +224,48 @@ document.getElementById("button-article-details-back").addEventListener(
         updateView(); //redraw view
     }
 );
+
+async function preloadOnHover(direction) {
+    try {
+        const offset = url.get("offset")+direction;
+        if(offset>=0) {
+            if(!(offset in this.cached)) {
+                console.log("requesting index ?offset=",offset);
+                const url = typeof(offset)===Number ? this.endpoint : this.endpoint+"?offset="+offset;
+                const response = await fetch(url);
+                if(response.ok) {
+                    const articles = await response.json();
+                    for(const [_,article] of Object.entries(articles)) //and add all to details cache
+                    {
+                        details.cached[article.id] = article;
+                    }
+                    this.cached[offset] = articles.map(x=>x.id);
+                }
+                else {
+                    throw new Error(response.status);
+                }
+            }
+        }
+    }
+    catch {
+        console.error("Blog: failed fetching articles.", e);
+    }
+}
+
 document.getElementById("index-prev").addEventListener(
+    "hover",
+    async () => {
+        preloadOnHover(-1);
+    }
+);
+document.getElementById("index-next").addEventListener(
+    "hover",
+    async () => {
+        preloadOnHover(1);
+    }
+);
+
+document.getElementById("index-next").addEventListener(
     "click",
     () => {
         const url = new URLSearchParams(window.location.search);
@@ -234,7 +275,7 @@ document.getElementById("index-prev").addEventListener(
         window.history.replaceState( //navigate back to main
             null,
             "",
-            "blog.html"+ (offset==1 ? "" : "?offset="+(offset-1))
+            "blog.html?offset=" + (offset+1)
         );
         updateView(); //redraw view
     }
