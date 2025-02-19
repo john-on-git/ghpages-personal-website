@@ -37,10 +37,7 @@
         flex: 1;
     }
 
-    #left-pane, #featured {
-        width: 100%;
-        height: 100%;
-
+    #left-pane {
         overflow: hidden;
         /*overflow hidden prevents the 'featured article not found'
         placeholder from extending outside the element, it does this in some
@@ -56,28 +53,16 @@
     #no-featured-article-placeholder {
         font-size: 5vw;
     }
-    #featured-article-img {
-        position: relative;
-
-        height: calc(75% - 1rem);
-        object-fit: cover;
-        
-        margin-bottom: 1rem;
-
-        margin-left: auto;
-        margin-right: auto;
-    }
 }
 @media (orientation:portrait) {
     /*nothing needed*/
 
     #featured {
         position: relative;
-
         margin-bottom: 1rem;
     }
 
-    #no-featured-article-placeholder, #featured p {
+    #no-featured-article-placeholder {
         position: absolute;
         inset: 0;
         margin: auto;
@@ -86,37 +71,60 @@
     #no-featured-article-placeholder {
         font-size: 5vh;
     }
-    
+
+    /*active article*/
+    #featured {
+        padding-bottom: 1rem;
+        border-bottom: .15rem solid#0E0067;
+    }
 }
-
-#featured a {
-    inset: 0;
-    margin: auto;
-
-    width: 80%;
-    height: 100%;
-    min-height: fit-content;
-
+#featured {
     text-align: center;
 }
 #featured > h2 {
     margin: 0;
     font-size: 3rem;
-    text-align: center;
+}
+
+
+/*active article*/
+#featured > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    height: 100%;
+    width: 100%;
+
+    margin-top: 10%;
+}
+#featured a {
+    display: block;
+
+    width: 80%;
+    
+    text-decoration: none;
 }
 #featured-article-title {
-    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
 }
 #featured-article-title > p {
     font-size: 3rem;
+    line-height: 1;
 }
 #featured img {
-    position: relative;
-    
-    width: 50%;
+    object-fit: contain;
+    width: 75%;
 
-    border: 1.5pt solid white;
+    margin-bottom: 1rem;
 }
+
 #no-featured-article-placeholder {
     position: absolute;
     inset: 0;
