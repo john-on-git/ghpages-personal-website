@@ -247,7 +247,7 @@ async function preloadOnHover(change) {
             }
         }
     }
-    catch {
+    catch(e) {
         console.error("Blog: failed fetching articles.", e);
     }
 }
