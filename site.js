@@ -45,7 +45,7 @@ class Automata {
         //(the eventlistener is sometimes called errouneously when scrolling on mobile)
         if(document.body.offsetHeight!=this.currentlySizedFor.height || document.body.offsetWidth!=this.currentlySizedFor.width)
         {
-            console.log("really resized");
+            alert("really resized", document.body.offsetHeight, document.body.offsetWidth);
             this.currentlySizedFor.height = document.body.offsetHeight;
             this.currentlySizedFor.width = document.body.offsetWidth;
 
