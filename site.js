@@ -30,55 +30,69 @@ class Automata {
         this.verticalHeight = Math.sqrt(this.scale**2 - (this.scale/2)**2); //find the vertical height of the triangle with side length this.scale. Pythagoras we love you
         this.ctx = this.canvas.getContext("2d"); 
 
+        this.currentlySizedFor = {
+            height: null,
+            width: null
+        };
+
         this.resize();
     }
     
     //function to resize the canvas and automata to fit the screen
     resize()
     {
-        this.canvas.style.height = (document.body.scrollHeight) + "px";
-        this.canvas.style.width = (document.body.scrollWidth) + "px";
-
-        //resize the resolution of the canvas to have the aspect ratio it's being displayed at, while maintaining a reasonable resolution
-        //for a canvas height/width is the resolution, NOT the deprecated html height/width 
-        this.canvas.width = Math.max(document.body.offsetWidth, 2560);
-        this.canvas.height = canvas.width * (this.canvas.scrollHeight/this.canvas.scrollWidth);
-
-
-        //size the cellular automata grid to the display
-        const prevWidth = this.width;
-        const prevHeight = this.height;
-        this.width = Math.floor(this.canvas.width / this.scale);
-        this.height = Math.floor(this.canvas.height / this.verticalHeight); //should be based on screen aspect ratio
-
-        //calculate margin size. the display is filled with as many cells as possible, then the margins are the remaining space
-        this.margins.width = (canvas.width - ((this.width-.5) * this.scale))/2;
-        this.margins.height = (canvas.height - (((this.height-1) * this.verticalHeight)))/2;
-            
-        //canvas config is reset upon resizing the canvas, so it must be set again
-        this.ctx.lineWidth = this.scale/25;
-        this.ctx.fillStyle = "#0E0067";
-        this.ctx.strokeStyle = "#0026FFC0";
-
-        //update the display to match the new width
-        this.nextData = [];
-        for(let i=0; i<this.width;i++)
+        //if the height actually changed, update the display
+        //(the eventlistener is sometimes called errouneously when scrolling on mobile)
+        if(document.body.offsetHeight!=this.currentlySizedFor.height || document.body.offsetWidth!=this.currentlySizedFor.width)
         {
-            this.nextData[i] = [];
-            for(let j=0; j<this.height;j++)
+            console.log("really resized");
+            this.currentlySizedFor.height = document.body.offsetHeight;
+            this.currentlySizedFor.width = document.body.offsetWidth;
+
+            this.canvas.style.height = (document.body.scrollHeight) + "px";
+            this.canvas.style.width = (document.body.scrollWidth) + "px";
+
+            //resize the resolution of the canvas to have the aspect ratio it's being displayed at, while maintaining a reasonable resolution
+            //for a canvas height/width is the resolution, NOT the deprecated html height/width 
+            this.canvas.width = Math.max(document.body.offsetWidth, 2560);
+            this.canvas.height = canvas.width * (this.canvas.scrollHeight/this.canvas.scrollWidth);
+
+
+            //size the cellular automata grid to the display
+            const prevWidth = this.width;
+            const prevHeight = this.height;
+            this.width = Math.floor(this.canvas.width / this.scale);
+            this.height = Math.floor(this.canvas.height / this.verticalHeight); //should be based on screen aspect ratio
+
+            //calculate margin size. the display is filled with as many cells as possible, then the margins are the remaining space
+            this.margins.width = (canvas.width - ((this.width-.5) * this.scale))/2;
+            this.margins.height = (canvas.height - (((this.height-1) * this.verticalHeight)))/2;
+                
+            //canvas config is reset upon resizing the canvas, so it must be set again
+            this.ctx.lineWidth = this.scale/25;
+            this.ctx.fillStyle = "#0E0067";
+            this.ctx.strokeStyle = "#0026FFC0";
+
+            //update the display to match the new width
+            this.nextData = [];
+            for(let i=0; i<this.width;i++)
             {
-                //copy over data if it exists, otherwise it's empty
-                if(prevHeight>i && prevWidth>j)
+                this.nextData[i] = [];
+                for(let j=0; j<this.height;j++)
                 {
-                    this.nextData[i][j] = this.data[i][j]; 
-                }
-                else
-                {
-                    this.nextData[i][j] = "offline";   
+                    //copy over data if it exists, otherwise it's empty
+                    if(prevHeight>i && prevWidth>j)
+                    {
+                        this.nextData[i][j] = this.data[i][j]; 
+                    }
+                    else
+                    {
+                        this.nextData[i][j] = "offline";   
+                    }
                 }
             }
+            this.data = this.nextData;
         }
-        this.data = this.nextData;
     }
     reset()
     {
@@ -309,6 +323,7 @@ function draw()
     automata.draw();
 }
 draw();
+
 const resizeAll = () => {
     automata.resize();
 };
