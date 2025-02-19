@@ -63,7 +63,8 @@ const index = {
 
             const articles = this.cached[offset];
             for(let i = 0;i<articles.length;i++) {
-                const article = details.cached[articles[i].id];      
+                const article = details.cached[articles[i].id];
+                console.log(article);
                 //construct snippet for article
                 const snippet = document.createElement("button");
                 snippet.addEventListener("click", async () => {
