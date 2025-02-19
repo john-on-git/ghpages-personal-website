@@ -229,9 +229,9 @@ async function preloadOnHover(change) {
     try {
         const offset = url.get("offset")+change;
         if(offset>=0) {
-            if(!(offset in this.cached)) {
+            if(!(offset in index.cached)) {
                 console.log("requesting index ?offset=",offset);
-                const url = typeof(offset)===Number ? this.endpoint : this.endpoint+"?offset="+offset;
+                const url = typeof(offset)===Number ? index.endpoint : index.endpoint+"?offset="+offset;
                 const response = await fetch(url);
                 if(response.ok) {
                     const articles = await response.json();
@@ -239,7 +239,7 @@ async function preloadOnHover(change) {
                     {
                         details.cached[article.id] = article;
                     }
-                    this.cached[offset] = articles.map(x=>x.id);
+                    index.cached[offset] = articles.map(x=>x.id);
                 }
                 else {
                     throw new Error(response.status);
@@ -265,13 +265,13 @@ function moveOnClick(change) {
 }
 
 document.getElementById("index-prev").addEventListener(
-    "hover",
+    "mouseover",
     async () => {
         preloadOnHover(-1);
     }
 );
 document.getElementById("index-next").addEventListener(
-    "hover",
+    "mouseover",
     async () => {
         preloadOnHover(1);
     }
@@ -280,13 +280,13 @@ document.getElementById("index-next").addEventListener(
 document.getElementById("index-prev").addEventListener(
     "click",
     () => {
-        preloadOnHover(-1);
+        moveOnClick(-1);
     }
 );
 document.getElementById("index-next").addEventListener(
     "click",
     () => {
-        preloadOnHover(1);
+        moveOnClick(1);
     }
 );
 updateView();
