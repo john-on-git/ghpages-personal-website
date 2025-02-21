@@ -406,13 +406,3 @@ setInterval(() => {
     lastWitchCheck = isWitchingHours;
 
 }, 60000); //every minute
-
-
-
-//color & rotate the peace sign according to the current percentage of the world population that has died in The War this year
-//doing this properly would require scraping wikipedia, so I should probably build a microservice that does that a on a respectful interval, and then clients can
-//get the data from my server
-//all red @ 1%
-
-//alternatively could show the doomsday clock? this is easier
-document.getElementById("symbol-peace").title = "89 seconds to midnight";
