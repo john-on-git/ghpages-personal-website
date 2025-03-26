@@ -206,7 +206,6 @@ canvas {
         transform: rotate(90deg);
         overflow: visible;
     }
-    
 }
 
 /*symbols and animation*/
@@ -304,4 +303,9 @@ button:hover {
     border-right: 1px solid #bbb9c6;
 
     background-color: #F5F7F7;
+}
+#featured a:hover {
+
+    border-color:#0026FF;
+    color:#0026FF;
 }

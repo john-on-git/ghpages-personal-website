@@ -89,6 +89,11 @@
     font-size: 3rem;
 }
 
+#featured p {
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
 
 /*active article*/
 #featured > div {
