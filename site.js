@@ -61,12 +61,11 @@ class Automata {
         };
     }
     
-    //function to resize the canvas and automata to fit the screen
+    /** 
+     * Resize the automata to fit its container
+     */
     resize()
     {
-        //TODO
-        //    1. margins are currently broken. doesn't really affect the look: not worth fixing imo
-
         const { width: canvasWidth, height: canvasHeight } = this.CANVAS.getBoundingClientRect();
 
         //if the height actually changed, update the display (the eventlistener is sometimes called erroneously when scrolling on mobile)
@@ -80,11 +79,13 @@ class Automata {
             const prevHeight = this.height;
             this.width = Math.floor(canvasWidth / this.CELL_WIDTH);
             this.height = Math.floor(canvasHeight / this.CELL_HEIGHT); //should be based on screen aspect ratio
-            // set the margins to the remainder
-            this.margins = { 
+
+            // set the margins to the remainder (but no less than the radius of the dots, or they'll be cut off)
+            this.margins = {
                 width: Math.max(this.DOT_RADIUS, canvasWidth % this.CELL_WIDTH),
                 height: Math.max(this.DOT_RADIUS, canvasHeight % this.CELL_HEIGHT)
             };
+
             //destroy the previous display
             this.CANVAS.innerHTML = '';
             
@@ -124,16 +125,17 @@ class Automata {
                         this.addLineToCanvas(
                             x, y, 
                             x + this.CELL_WIDTH, y,
-                            this.LINK_CHANNEL_COLOR, this.LINK_CHANNEL_WIDTH, this.LINK_CHANNEL_OPACITY
+                            this.LINK_CHANNEL_COLOR, this.LINK_CHANNEL_WIDTH, this.LINK_CHANNEL_OPACITY,
                         );
 
                         this.lineElementHandles[i][(j*3)] = this.addLineToCanvas(
                             x, y, 
                             x + this.CELL_WIDTH, y,
-                            this.ACTIVE_LINK_COLOR, this.ACTIVE_LINK_WIDTH, this.ACTIVE_LINK_OPACITY
+                            this.ACTIVE_LINK_COLOR, this.ACTIVE_LINK_WIDTH, this.ACTIVE_LINK_OPACITY,
+                            'hidden'
                         );
                     }
-                    if(this.hasBLLink(i,j)) //the first cell in each row only has a bottom-left link on alternating rows, and the last row never does
+                    if(this.hasBLLink(i,j))
                     {
                         //bottom left
                         this.addLineToCanvas(
@@ -145,7 +147,8 @@ class Automata {
                         this.lineElementHandles[i][(j*3)+1] = this.addLineToCanvas(
                             x, y,
                             x - (this.CELL_WIDTH/2), y + this.CELL_HEIGHT,
-                            this.ACTIVE_LINK_COLOR, this.ACTIVE_LINK_WIDTH, this.ACTIVE_LINK_OPACITY
+                            this.ACTIVE_LINK_COLOR, this.ACTIVE_LINK_WIDTH, this.ACTIVE_LINK_OPACITY,
+                            'hidden'
                         );
                     }
                     // bottom right
@@ -158,7 +161,8 @@ class Automata {
                         this.lineElementHandles[i][(j*3)+2] = this.addLineToCanvas(
                             x, y,
                             x + (this.CELL_WIDTH/2), y+this.CELL_HEIGHT,
-                            this.ACTIVE_LINK_COLOR, this.ACTIVE_LINK_WIDTH, this.ACTIVE_LINK_OPACITY
+                            this.ACTIVE_LINK_COLOR, this.ACTIVE_LINK_WIDTH, this.ACTIVE_LINK_OPACITY,
+                            'hidden'
                         );
                     }
                     
@@ -173,51 +177,56 @@ class Automata {
             }
         }
     }
-    hasRLink = (i,j) => i<this.width-1;
-    hasBLLink = (i,j) => (i!==0 || j%2 != 0) && j<this.height-1;
-    hasBRLink = (i,j) => (i!==this.width-1 || j%2 == 0) && j<this.height-1;
+    hasRLink = (i,_=undefined) => i<this.width-1; //the last cell in each row doesn't have a next cell
+    hasBLLink = (i,j) => (i!==0 || j%2 != 0) && j<this.height-1; //the first cell in each row only has a bottom-left link on alternating rows, and the last row never does
+    hasBRLink = (i,j) => (i!==this.width-1 || j%2 == 0) && j<this.height-1; //the last cell in each row only has a bottom-right link on alternating rows, and the last row never does
+    /**
+     * Update the look of the this.canvas to match the state of this.cells.
+     */
     updateView()
     {
         for(let j=0; j<this.height;j++)
         {
             for(let i=0; i<this.width;i++)
             {
-                //every other cell, look at the neighbours in the bottom-right half, these haven't been processed yet.
-                //draw the linking line if both cells are On
+                //draw the linking line if both cells are on
                 if(this.cells[i][j]==='online') //if this cell is off we don't need to check any neighbours
                 {
-                    if(this.hasRLink(i,j)) { //the last cell in each row doesn't have a next cell  
+                    if(this.hasRLink(i,j)) { 
                         this.lineElementHandles[i][(j*3)].setAttribute('visibility', this.cells[i+1][j]==='online' ? 'visible' : 'hidden');
                     }
-                    if(this.hasBLLink(i,j)) {//the first cell in each row only has a bottom-left link on alternating rows, and the last row never does
-                       this.lineElementHandles[i][(j*3)+1].setAttribute('visibility', 
+                    if(this.hasBLLink(i,j)) {
+                        this.lineElementHandles[i][(j*3)+1].setAttribute('visibility', 
                         (
                             (j%2!==0 && this.cells[i][j+1]==='online') || 
                             (i>0 && this.cells[i-1][j+1]==='online')
                         ) ? 'visible' : 'hidden');
                     }
-                    if(this.hasBRLink(i,j)) { //the last cell in each row only has a bottom-right link on alternating rows, and the last row never does
+                    if(this.hasBRLink(i,j)) { 
                         this.lineElementHandles[i][(j*3)+2].setAttribute('visibility',
-                            (
-                                (j%2===0 && this.cells[i][j+1]==='online') || 
-                                (i<this.width-1 && this.cells[i+1][j+1]==='online')
-                            ) ? 'visible' : 'hidden');   
+                        (
+                            (j%2===0 && this.cells[i][j+1]==='online') || 
+                            (i<this.width-1 && this.cells[i+1][j+1]==='online')
+                        ) ? 'visible' : 'hidden');   
                     }
                 }
                 else {
-                    if(this.hasRLink(i,j)) { //the last cell in each row doesn't have a next cell
+                    if(this.hasRLink(i,j)) {
                         this.lineElementHandles[i][(j*3)].setAttribute('visibility', 'hidden');
                     }
-                    if(this.hasBLLink(i,j)) { //the first cell in each row only has a bottom-left link on alternating rows, and the last row never does
+                    if(this.hasBLLink(i,j)) {
                         this.lineElementHandles[i][(j*3)+1].setAttribute('visibility', 'hidden');
                     }
-                    if(this.hasBRLink(i,j)) { //the last cell in each row only has a bottom-right link on alternating rows, and the last row never does                    
+                    if(this.hasBRLink(i,j)) {
                         this.lineElementHandles[i][(j*3)+2].setAttribute('visibility', 'hidden');
                     }
                 }
             }   
         }
     }
+    /**
+     * reset the automata to a random state
+     */
     reset()
     {
         //initialize with a random state
@@ -230,6 +239,9 @@ class Automata {
             }
         }
     }
+    /**
+     * Update this.cells to a successor state of its current value.
+     */
     advance()
     {
         let noChange = true;
@@ -339,7 +351,7 @@ class Automata {
             this.reset();
         }
     }
-    addLineToCanvas(x1,y1, x2,y2, color, width = 1, opacity=1, visibility='hidden') {
+    addLineToCanvas(x1,y1, x2,y2, color, width = 1, opacity=1, visibility='visible') {
         //create the element
         const line = document.createElementNS(this.CANVAS.namespaceURI, 'line');
         //add it to the SVG
@@ -353,8 +365,10 @@ class Automata {
         
         line.setAttribute('stroke', color);
         line.setAttribute('stroke-opacity', opacity);
-        line.setAttribute('stroke-width', width)
-        line.setAttribute('visibility', visibility)
+        line.setAttribute('stroke-width', width);
+        line.setAttribute('visibility', visibility);
+        
+        line.setAttribute('shape-rendering', 'geometricPrecision');
 
         this.CANVAS.appendChild(line);
         return line;
@@ -372,19 +386,36 @@ class Automata {
         circle.setAttribute('fill', fillColor);
         circle.setAttribute('fill-opacity', fillOpacity);
 
+        circle.setAttribute('shape-rendering', 'geometricPrecision');
+
         return circle;
     }
+    /**
+     * Advance this Automata's state and update the canvas.
+     */
     tick() {
         this.advance();
         this.updateView();
     }
+
+    /**
+     * Start this Automata if it is not running, otherwise does nothing.
+     */
     start() {
-        this.resize();
-        this.tick();
-        this.tickIntervalID = setInterval(this.tick.bind(this), 250);
+        if(this.tickIntervalID === undefined) {
+            this.resize();
+            this.tick();
+            this.tickIntervalID = setInterval(this.tick.bind(this), 250); 
+        }
     }
+    /**
+     * Stop this Automata if it is running, otherwise does nothing.
+     */
     stop() {
-        clearInterval(this.tickIntervalID);
+        if(this.tickIntervalID) {
+            clearInterval(this.tickIntervalID);
+            this.tickIntervalID === undefined;
+        }
     }
 }
 
