@@ -306,6 +306,7 @@ button:hover {
 }
 #featured a:hover {
 
-    border-color:#0026FF;
+    border-left-color:#0026FF;
+    border-bottom-color:#0026FF;
     color:#0026FF;
 }
