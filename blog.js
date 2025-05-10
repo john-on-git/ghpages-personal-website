@@ -43,7 +43,6 @@ const index = {
             //get & cache the data from the server if it isn't already cached
             if(!(offset in this.cached))
             {
-                console.log("requesting index ?offset=",offset);
                 const url = typeof(offset)===Number ? this.endpoint : this.endpoint+"?offset="+offset;
                 const response = await fetch(url);
                 if(response.ok) {
@@ -153,12 +152,10 @@ const details = {
             //get & cache the data from the server if it isn't already cached
             if(!(id in this.cached))
             {
-                console.log("requesting details ?id=",id);
                 const url = this.endpoint + id;
                 const response = await fetch(url);
                 if(response.ok) {
                     this.cached[id] = await response.json();
-                    console.log("added to details cache");
                 }
                 else {
                     throw new Error(response.status);
@@ -232,7 +229,6 @@ async function preload(change) {
         offset = offset===null ? 0 : parseInt(offset)+change;
         if(offset>=0) {
             if(!(offset in index.cached)) {
-                console.log("requesting index ?offset=",offset);
                 const APIURL = typeof(offset)===Number ? index.endpoint : index.endpoint+"?offset="+offset;
                 const response = await fetch(APIURL);
                 if(response.ok) {

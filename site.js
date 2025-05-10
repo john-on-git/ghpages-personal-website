@@ -39,9 +39,9 @@ class Automata {
         this.LINK_CHANNEL_OPACITY = 0.05;
 
         // drawing params for the bright blue lines between each cell when they're active
-        this.ACTIVE_LINK_COLOR = '#0026FF';
+        this.ACTIVE_LINK_COLOR = '#3D59FD'; //'#0026FF' @ 0.75 opacity
         this.ACTIVE_LINK_WIDTH = this.CELL_WIDTH * 0.05;
-        this.ACTIVE_LINK_OPACITY = 0.75;
+        this.ACTIVE_LINK_OPACITY = 1; //0.75;
 
         this.cells = []; //the state of the automata
         this.dotElementHandles = []; //the SVG elements responsible for displaying the dots. these correspond to cells
@@ -339,7 +339,7 @@ class Automata {
             this.reset();
         }
     }
-    addLineToCanvas(x1,y1, x2,y2, color, width = 1, opacity=1) {
+    addLineToCanvas(x1,y1, x2,y2, color, width = 1, opacity=1, visibility='hidden') {
         //create the element
         const line = document.createElementNS(this.CANVAS.namespaceURI, 'line');
         //add it to the SVG
@@ -354,6 +354,7 @@ class Automata {
         line.setAttribute('stroke', color);
         line.setAttribute('stroke-opacity', opacity);
         line.setAttribute('stroke-width', width)
+        line.setAttribute('visibility', visibility)
 
         this.CANVAS.appendChild(line);
         return line;
