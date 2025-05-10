@@ -1,4 +1,6 @@
-/*html + body sizing*/
+html, body {
+    position: relative;
+}
 html, body, p {
     margin: 0;
     padding: 0;
@@ -18,37 +20,25 @@ h1, h2, h3, #email {
 }
 
 body {
+
     color: #0E0067;
     font-family: 'Arial';
     /*used if JS fails*/
     background-image: url("asset/mockgrid.png");
     background-size: 3%;
     font-size: 0;
-
-}
-canvas {
-    position: absolute;
-
-    width: 100%;
-    height: 100%;
-
-    margin: 0;
-    padding: 0;
-
-    z-index: -1;
 }
 
 #witch-title {
     position: absolute;
-    top: 1rem;
-    left: 12.7%;
+    top: 2.5vh;
+    left: 12.7vw;
 
-    height: 12.5%;
-    filter: drop-shadow(0 0 1px #000000);
+    height: 12.5vh;
+    filter: drop-shadow(0 0 0.1rem #000000);
 }
 #main-flex {
-    position: relative;
-    top: 15vh;
+    padding-top: 15vh;
 
     display: flex;
     flex-direction: row;
@@ -151,7 +141,24 @@ canvas {
     */
     display: grid;
 }
+
+.cellular-automata {
+    position: absolute;
+
+    top: 2.5%;
+    height: 97.5%;
+
+    margin: 0;
+    padding: 0;
+
+    z-index: -1;
+}
 @media (orientation:landscape) {
+    .cellular-automata {
+        left: 2.5%;
+
+        width: 95%;
+    }
     .random-symbol-grid {
         position: absolute;
         grid-template-columns: auto auto;
@@ -176,6 +183,11 @@ canvas {
 
 @media (orientation:portrait)
 {
+    .cellular-automata {
+        left: 5%;
+    
+        width: 90%;
+    }
     .random-symbol-grid {
         grid-template-columns: auto;
     }

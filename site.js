@@ -7,7 +7,7 @@ class Recovering {
     {
         if(this.time==0)
         {
-            return "offline";
+            return 'offline';
         }
         else
         {
@@ -22,11 +22,30 @@ class Recovering {
 class Automata {
     constructor(scale, canvas)
     {
-        this.baseScale = scale; //controls the size of the cells as a percentage of the total
-        this.canvas = canvas;
+        //constants
+        this.CELL_WIDTH = scale;
+        this.CELL_HEIGHT = Math.sqrt(this.CELL_WIDTH**2 - (this.CELL_WIDTH/2)**2); //find the vertical height of the triangle with side length this.scale. Pythagoras we love you
 
-        this.data = [];
-        this.ctx = this.canvas.getContext("2d"); 
+        this.CANVAS = canvas;
+
+        // drawing params for the dark dots at each cell
+        this.RADIUS_DOT = this.CELL_WIDTH * .05;
+        this.DOT_FILL_COLOR = '#0E0067';
+        this
+
+        // drawing params for the greyish lines between each cell
+        this.LINK_CHANNEL_COLOR = '#0E0067';
+        this.LINK_CHANNEL_WIDTH = this.CELL_WIDTH * 0.025;
+        this.LINK_CHANNEL_OPACITY = 0.05;
+
+        // drawing params for the bright blue lines between each cell when they're active
+        this.ACTIVE_LINK_COLOR = '#0026FF';
+        this.ACTIVE_LINK_WIDTH = this.CELL_WIDTH * 0.05;
+        this.ACTIVE_LINK_OPACITY = 0.75;
+
+        this.cells = []; //the state of the automata
+        this.dotElementHandles = []; //the SVG elements responsible for displaying the dots. these correspond to cells
+        this.lineElementHandles = []; //the SVG elements responsible for displaying the colored lines. these do not correspond with cells, they are paths between cells
 
         //properties that depend on resize()
         this.isPortrait = undefined;
@@ -34,14 +53,12 @@ class Automata {
             height: undefined,
             width: undefined
         };
-        this.scale = undefined;
-        this.verticalHeight = undefined; //find the vertical height of the triangle with side length this.scale. Pythagoras we love you
+        
+        //set margin sizes. necessary as if the display were to start at exactly (0,0), some of it would be cut off
         this.margins = { 
             height: undefined,
             width: undefined
         };
-
-        this.resize();
     }
     
     //function to resize the canvas and automata to fit the screen
@@ -50,60 +67,154 @@ class Automata {
         //TODO
         //    1. margins are currently broken. doesn't really affect the look: not worth fixing imo
 
-        //if the height actually changed, update the display
-        //(the eventlistener is sometimes called errouneously when scrolling on mobile)
-        if(document.body.offsetHeight!=this.currentlySizedFor.height || document.body.offsetWidth!=this.currentlySizedFor.width)
+        const { width: canvasWidth, height: canvasHeight } = this.CANVAS.getBoundingClientRect();
+
+        //if the height actually changed, update the display (the eventlistener is sometimes called erroneously when scrolling on mobile)
+        if(canvasHeight!=this.currentlySizedFor.height || canvasWidth!=this.currentlySizedFor.width)
         {
-            this.isPortrait = window.matchMedia("(orientation: portrait)").matches;
-            this.currentlySizedFor.height = document.body.offsetHeight;
-            this.currentlySizedFor.width = document.body.offsetWidth;
-
-            this.canvas.style.height = (document.body.scrollHeight) + "px";
-            this.canvas.style.width = (document.body.scrollWidth) + "px";
-
-            //resize the resolution of the canvas to have the aspect ratio it's being displayed at, while maintaining a reasonable resolution
-            //for a canvas height/width is the resolution, NOT the deprecated html height/width 
-            this.canvas.width = this.isPortrait ? 500 : 2560; //bigger on desktop
-            this.canvas.height = canvas.width * (this.canvas.scrollHeight/this.canvas.scrollWidth);
-
-            this.scale = this.baseScale / 100 * this.canvas.width;
-            this.verticalHeight = Math.sqrt(this.scale**2 - (this.scale/2)**2); //find the vertical height of the triangle with side length this.scale. Pythagoras we love you
-
+            this.currentlySizedFor.height = canvasWidth;
+            this.currentlySizedFor.width = canvasWidth;
 
             //size the cellular automata grid to the display
             const prevWidth = this.width;
             const prevHeight = this.height;
-            this.width = Math.floor(this.canvas.width / this.scale);
-            this.height = Math.floor(this.canvas.height / this.verticalHeight); //should be based on screen aspect ratio
-
-            //calculate margin size. the display is filled with as many cells as possible, then the margins are the remaining space
-            this.margins.width = (this.canvas.width - ((this.width-.5) * this.scale))/2;
-            this.margins.height = (this.canvas.height - (((this.height-1) * this.verticalHeight)))/2;
-                
-            //canvas config is reset upon resizing the canvas, so it must be set again
-            this.ctx.lineWidth = this.scale/25;
-            this.ctx.fillStyle = "#0E0067";
-            this.ctx.strokeStyle = "#0026FFC0";
-
-            //update the display to match the new width
-            this.nextData = [];
-            for(let i=0; i<this.width;i++)
-            {
-                this.nextData[i] = [];
+            this.width = Math.floor(canvasWidth / this.CELL_WIDTH);
+            this.height = Math.floor(canvasHeight / this.CELL_HEIGHT); //should be based on screen aspect ratio
+            // set the margins to the remainder
+            this.margins = { 
+                width: Math.max(this.RADIUS_DOT, canvasWidth % this.CELL_WIDTH),
+                height: Math.max(this.RADIUS_DOT, canvasHeight % this.CELL_HEIGHT)
+            };
+            //destroy the previous display
+            this.CANVAS.innerHTML = '';
+            
+            //update the arrays
+            const nextCells = new Array(this.width);
+            this.lineElementHandles = new Array(this.width);
+            this.dotElementHandles = new Array(this.width);
+            //init the arrays
+            for(let i=0; i<this.width;i++) {
+                // init cells and copy over the data
+                nextCells[i] = new Array(this.height);
                 for(let j=0; j<this.height;j++)
                 {
                     //copy over data if it exists, otherwise it's empty
-                    if(prevHeight>i && prevWidth>j)
-                    {
-                        this.nextData[i][j] = this.data[i][j]; 
+                    nextCells[i][j] = prevHeight && prevWidth && prevHeight<i && prevWidth<j ? this.cells[i][j] : 'offline';
+                }
+
+                //allocate handles for the svg elements
+                this.lineElementHandles[i] = new Array(this.height * 3); //each dot has three lines
+                this.dotElementHandles[i] = new Array(this.height);
+            }
+            this.cells = nextCells;
+
+            //build the display
+            for(let j=0; j<this.height;j++)
+            {
+                const y = this.margins.height + (j*this.CELL_HEIGHT);
+                for(let i=0; i<this.width;i++)
+                {
+                    const x = this.margins.width + ((i)*this.CELL_WIDTH) + (j%2===0 ? 0 : this.CELL_WIDTH/2); //x pos of cell
+
+                    //create the line display elements. but don't create elements that would extend off the edge of the grid
+                    //first create the link channel (the thin grey lines that are always on)
+                    //then create the active link (the thick blue lines that flicker)
+
+                    if(this.hasRLink(i,j)) { //the last cell in each row doesn't have a next cell
+                        this.addLineToCanvas(
+                            x, y, 
+                            x + this.CELL_WIDTH, y,
+                            this.LINK_CHANNEL_COLOR, this.LINK_CHANNEL_WIDTH, this.LINK_CHANNEL_OPACITY
+                        );
+
+                        this.lineElementHandles[i][(j*3)] = this.addLineToCanvas(
+                            x, y, 
+                            x + this.CELL_WIDTH, y,
+                            this.ACTIVE_LINK_COLOR, this.ACTIVE_LINK_WIDTH, this.ACTIVE_LINK_OPACITY
+                        );
                     }
-                    else
+                    if(this.hasBLLink(i,j)) //the first cell in each row only has a bottom-left link on alternating rows, and the last row never does
                     {
-                        this.nextData[i][j] = "offline";   
+                        //bottom left
+                        this.addLineToCanvas(
+                            x, y,
+                            x - (this.CELL_WIDTH/2), y + this.CELL_HEIGHT,
+                            this.LINK_CHANNEL_COLOR, this.LINK_CHANNEL_WIDTH, this.LINK_CHANNEL_OPACITY
+                        );
+                        //bottom left
+                        this.lineElementHandles[i][(j*3)+1] = this.addLineToCanvas(
+                            x, y,
+                            x - (this.CELL_WIDTH/2), y + this.CELL_HEIGHT,
+                            this.ACTIVE_LINK_COLOR, this.ACTIVE_LINK_WIDTH, this.ACTIVE_LINK_OPACITY
+                        );
                     }
+                    // bottom right
+                    if(this.hasBRLink(i,j)) { //the last cell in each row only has a bottom-right link on alternating rows, and the last row never does
+                        this.addLineToCanvas(
+                            x, y,
+                            x + (this.CELL_WIDTH/2), y+this.CELL_HEIGHT,
+                            this.LINK_CHANNEL_COLOR, this.LINK_CHANNEL_WIDTH, this.LINK_CHANNEL_OPACITY
+                        );
+                        this.lineElementHandles[i][(j*3)+2] = this.addLineToCanvas(
+                            x, y,
+                            x + (this.CELL_WIDTH/2), y+this.CELL_HEIGHT,
+                            this.ACTIVE_LINK_COLOR, this.ACTIVE_LINK_WIDTH, this.ACTIVE_LINK_OPACITY
+                        );
+                    }
+                    
+                    //create the new dot display element.
+                    //this must be done after the lines, as SVG element layering is based on order in the document, and dots should be above lines
+                    this.dotElementHandles[i][j] = this.addDotToCanvas(
+                        x, y,
+                        this.RADIUS_DOT,
+                    );
                 }
             }
-            this.data = this.nextData;
+        }
+    }
+    hasRLink = (i,j) => i<this.width-1;
+    hasBLLink = (i,j) => (i!==0 || j%2 != 0) && j<this.height-1;
+    hasBRLink = (i,j) => (i!==this.width-1 || j%2 == 0) && j<this.height-1;
+    updateView()
+    {
+        for(let j=0; j<this.height;j++)
+        {
+            for(let i=0; i<this.width;i++)
+            {
+                //every other cell, look at the neighbours in the bottom-right half, these haven't been processed yet.
+                //draw the linking line if both cells are On
+                if(this.cells[i][j]==='online') //if this cell is off we don't need to check any neighbours
+                {
+                    if(this.hasRLink(i,j)) { //the last cell in each row doesn't have a next cell  
+                        this.lineElementHandles[i][(j*3)].setAttribute('visibility', this.cells[i+1][j]==='online' ? 'visible' : 'hidden');
+                    }
+                    if(this.hasBLLink(i,j)) {//the first cell in each row only has a bottom-left link on alternating rows, and the last row never does
+                       this.lineElementHandles[i][(j*3)+1].setAttribute('visibility', 
+                        (
+                            (j%2!==0 && this.cells[i][j+1]==='online') || 
+                            (i>0 && this.cells[i-1][j+1]==='online')
+                        ) ? 'visible' : 'hidden');
+                    }
+                    if(this.hasBRLink(i,j)) { //the last cell in each row only has a bottom-right link on alternating rows, and the last row never does
+                        this.lineElementHandles[i][(j*3)+2].setAttribute('visibility',
+                            (
+                                (j%2===0 && this.cells[i][j+1]==='online') || 
+                                (i<this.width-1 && this.cells[i+1][j+1]==='online')
+                            ) ? 'visible' : 'hidden');   
+                    }
+                }
+                else {
+                    if(this.hasRLink(i,j)) { //the last cell in each row doesn't have a next cell
+                        this.lineElementHandles[i][(j*3)].setAttribute('visibility', 'hidden');
+                    }
+                    if(this.hasBLLink(i,j)) { //the first cell in each row only has a bottom-left link on alternating rows, and the last row never does
+                        this.lineElementHandles[i][(j*3)+1].setAttribute('visibility', 'hidden');
+                    }
+                    if(this.hasBRLink(i,j)) { //the last cell in each row only has a bottom-right link on alternating rows, and the last row never does                    
+                        this.lineElementHandles[i][(j*3)+2].setAttribute('visibility', 'hidden');
+                    }
+                }
+            }   
         }
     }
     reset()
@@ -111,87 +222,87 @@ class Automata {
         //initialize with a random state
         for(let i=0; i<this.width;i++)
         {
-            this.data[i] = [];
+            this.cells[i] = [];
             for(let j=0; j<this.height;j++)
             {
-                this.data[i][j] = Math.floor(Math.random() * 4) === 1 ? "online" : "offline";
+                this.cells[i][j] = Math.floor(Math.random() * 4) === 1 ? 'online' : 'offline';
             }
         }
     }
     advance()
     {
         let noChange = true;
-        this.nextData = [];
+        const nextCells = [];
         for(let i=0; i<this.width;i++)
         {
-            this.nextData[i] = this.data[i];
+            nextCells[i] = this.cells[i];
             for(let j=0; j<this.height;j++)
             {
                 let nNeighbours = 0;
-                switch (this.data[i][j])
+                switch (this.cells[i][j])
                 {
-                    case "online":
-                        if(i>0 && j<this.height-1 && this.data[i-1][j+1]==="online")//topleft
+                    case 'online':
+                        if(i>0 && j<this.height-1 && this.cells[i-1][j+1]==='online')//topleft
                         {
                             nNeighbours++;
                         }
-                        if(i<this.width-1 && j<this.height-1 && this.data[i+1][j+1]==="online")//topright
+                        if(i<this.width-1 && j<this.height-1 && this.cells[i+1][j+1]==='online')//topright
                         {
                             nNeighbours++;
                         }
-                        if(i>0 && this.data[i-1][j]==="online")//left
+                        if(i>0 && this.cells[i-1][j]==='online')//left
                         {
                             nNeighbours++;
                         }
-                        if(i<this.width-1 && this.data[i+1][j]==="online")//right
+                        if(i<this.width-1 && this.cells[i+1][j]==='online')//right
                         {
                             nNeighbours++;
                         }
-                        if(i>0 && j>0 && this.data[i-1][j-1]==="online")//botleft
+                        if(i>0 && j>0 && this.cells[i-1][j-1]==='online')//botleft
                         {
                             nNeighbours++;
                         }
-                        if(i<this.width-1 && j>0 && this.width-1>this.data[i+1][j-1]==="online")//botright
+                        if(i<this.width-1 && j>0 && this.width-1>this.cells[i+1][j-1]==='online')//botright
                         {
                             nNeighbours++;
                         }
 
                         if(Math.floor(Math.random() * 100)<=5*nNeighbours)
                         {
-                            this.nextData[i][j] = new Recovering(10);
-                            noChange = false;1
+                            nextCells[i][j] = new Recovering(10);
+                            noChange = false;
                         }
                         else
                         {
-                            this.nextData[i][j] = this.data[i][j];
+                            nextCells[i][j] = this.cells[i][j];
                         }
                         break;
-                    case "offline":
+                    case 'offline':
                         //the grid is isomorphic to a square, look at the zigzagging vertical columns and imagine straightening them out.
                         //it's connected like an eight cell neighbourhood, but missing the top left and bottom left cells.  
                         //count neighbours
                     
-                        if(i>0 && j<this.height-1 && this.data[i-1][j+1]==="online")//topleft
+                        if(i>0 && j<this.height-1 && this.cells[i-1][j+1]==='online')//topleft
                         {
                             nNeighbours++;
                         }
-                        if(i<this.width-1 && j<this.height-1 && this.data[i+1][j+1]==="online")//topright
+                        if(i<this.width-1 && j<this.height-1 && this.cells[i+1][j+1]==='online')//topright
                         {
                             nNeighbours++;
                         }
-                        if(i>0 && this.data[i-1][j]==="online")//left
+                        if(i>0 && this.cells[i-1][j]==='online')//left
                         {
                             nNeighbours++;
                         }
-                        if(i<this.width-1 && this.data[i+1][j]==="online")//right
+                        if(i<this.width-1 && this.cells[i+1][j]==='online')//right
                         {
                             nNeighbours++;
                         }
-                        if(i>0 && j>0 && this.data[i-1][j-1]==="online")//botleft
+                        if(i>0 && j>0 && this.cells[i-1][j-1]==='online')//botleft
                         {
                             nNeighbours++;
                         }
-                        if(i<this.width-1 && j>0 && this.width-1>this.data[i+1][j-1]==="online")//botright
+                        if(i<this.width-1 && j>0 && this.width-1>this.cells[i+1][j-1]==='online')//botright
                         {
                             nNeighbours++;
                         }
@@ -200,26 +311,26 @@ class Automata {
                         {
                             if(Math.floor(Math.random() * 100)<=10*nNeighbours)
                             {
-                                this.nextData[i][j] = "online";
+                                nextCells[i][j] = 'online';
                                 noChange = false;
                             }
                             else
                             {
-                                this.nextData[i][j] = this.data[i][j];
+                                nextCells[i][j] = this.cells[i][j];
                             }
                         }
 
                         break;
                     default: //recovering
-                        if(this.data[i][j] instanceof Recovering)
+                        if(this.cells[i][j] instanceof Recovering)
                         {
-                            this.nextData[i][j]= this.data[i][j].next();
+                            nextCells[i][j]= this.cells[i][j].next();
                             noChange = false;    
                         }
                 }
             }
         }
-        this.data = this.nextData;
+        this.cells = nextCells;
         
         //reset the automaton if there's somehow no activity
         if(noChange) 
@@ -227,122 +338,76 @@ class Automata {
             this.reset();
         }
     }
-    draw()
-    {
-        this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
+    addLineToCanvas(x1,y1, x2,y2, color, width = 1, opacity=1) {
+        //create the element
+        const line = document.createElementNS(this.CANVAS.namespaceURI, 'line');
+        //add it to the SVG
+        
+        //set attributes
+        line.setAttribute('x1', x1);
+        line.setAttribute('y1', y1);
+        
+        line.setAttribute('x2', x2);
+        line.setAttribute('y2', y2);
+        
+        line.setAttribute('stroke', color);
+        line.setAttribute('stroke-opacity', opacity);
+        line.setAttribute('stroke-width', width)
 
-        for(let j=0; j<this.height;j++)
-        {
-            const y = this.margins.height + (j*this.verticalHeight);
-            for(let i=0; i<this.width;i++)
-            {
-                //dots
-                const x = this.margins.width + ((i)*this.scale) + (j%2===0 ? 0 : this.scale/2);
-                //lines (cell contents)
-                //every other cell, look at the neighbours in the bottom-right half, these haven't been processed yet.
-                //draw the linking line if both cells are On
-                if(this.data[i][j]==="online") //and this cell on
-                {
-                    //next in this row
-                    if(i<this.width-1 && this.data[i+1][j]==="online")
-                    {
-                        
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(x, y);
-                        this.ctx.lineTo(
-                            x + this.scale,
-                            y);
-                        this.ctx.stroke();
-                    }
-
-                    //bottom left
-                    if(
-                        j<this.height-1 && 
-                        (
-                            (j%2!==0 && this.data[i][j+1]==="online") || 
-                            (i>0 && this.data[i-1][j+1]==="online")
-                        )
-                    )
-                    {
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(x, y);
-                        this.ctx.lineTo(
-                            x - (this.scale/2),
-                            y+this.verticalHeight
-                        );
-                        this.ctx.stroke();
-                    }
-                    
-                    //bottom right
-                    if(
-                        j<this.height-1 && 
-                        (
-                            (j%2===0 && this.data[i][j+1]==="online") || 
-                            (i<this.width-1 && this.data[i+1][j+1]==="online")
-                        )
-                    )
-                    {
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(x, y);
-                        this.ctx.lineTo(
-                            x + (this.scale/2),
-                            y+this.verticalHeight
-                        );
-                        this.ctx.stroke();
-                    }
-                }
-                //draw dot
-                this.ctx.beginPath();
-                this.ctx.arc(
-                    x,
-                    y,
-                    
-                    this.scale * .05,
-                    0,
-                    2 * Math.PI
-                );
-                this.ctx.fill();
-            }   
-        }
+        this.CANVAS.appendChild(line);
+        return line;
+    }
+    addDotToCanvas(x,y, radius) {
+        //create the element
+        const circle = document.createElementNS(this.CANVAS.namespaceURI, 'circle');
+        //add it to the SVG
+        this.CANVAS.appendChild(circle);
+        
+        //set attributes
+        circle.setAttribute('fill', this.DOT_FILL_COLOR);
+        circle.setAttribute('cx', x);
+        circle.setAttribute('cy', y);
+        circle.setAttribute('r', radius);
+        
+        return circle;
+    }
+    tick() {
+        this.advance();
+        this.updateView();
+    }
+    start() {
+        this.resize();
+        this.tick();
+        this.tickIntervalID = setInterval(this.tick.bind(this), 250);
+    }
+    stop() {
+        clearInterval(this.tickIntervalID);
     }
 }
 
 //disable noJS placeholder
-document.body.style["background-image"] = "none";
+document.body.style['background-image'] = 'none';
 
 //set up canvas and automata
-const isPortrait = window.matchMedia("(orientation: portrait)").matches;
-const canvas = document.getElementById("cellular-canvas");
+const isPortrait = window.matchMedia('(orientation: portrait)').matches;
+const svgCanvas = document.getElementById('cellular-canvas');
 const automata = new Automata(
-    (isPortrait ? 20 : 5), //phones have higher DPI. can't query actual screen DPI. there must a better way to do this
-    canvas
+    document.body.offsetWidth / (isPortrait ? 8 : 30), 
+    svgCanvas
 );
-
-
-//resize the sidebar with js. 
-//after significant time-wasting, this doesn't seem to be possible with CSS for some reason :/
-const paleSheet = document.getElementById("pale-sheet");
-
-
-//start drawing cellular automata
-function draw()
-{
-    automata.advance();
-    automata.draw();
-}
-draw();
+automata.start();
 
 const resizeAll = () => {
+    svgCanvas.style.height = document.body.scrollHeight;
     automata.resize();
 };
-window.addEventListener("resize", resizeAll);
+window.addEventListener('resize', resizeAll);
 
-//start/stop background
-let repeatDrawEventID = setInterval(draw, 250);
 /**
-const buttonKillBackground = document.getElementById("button-kill-background");
-buttonKillBackground.flipsideTextContent = "Start Background";
-buttonKillBackground.addEventListener("click", () => {
+// logic for the 'stop background' button (disabled)
+const buttonKillBackground = document.getElementById('button-kill-background');
+buttonKillBackground.flipsideTextContent = 'Start Background';
+buttonKillBackground.addEventListener('click', () => {
     const temp = buttonKillBackground.textContent;
     buttonKillBackground.textContent = buttonKillBackground.flipsideTextContent;
     buttonKillBackground.flipsideTextContent = temp;
@@ -350,17 +415,17 @@ buttonKillBackground.addEventListener("click", () => {
     if(repeatDrawEventID===null)
     {
         repeatDrawEventID = setInterval(draw, 250);
-        document.querySelectorAll(".suppressed-spin").forEach((x) => {
-            x.classList.add("spin");
-            x.classList.remove("suppressed-spin");
+        document.querySelectorAll('.suppressed-spin').forEach((x) => {
+            x.classList.add('spin');
+            x.classList.remove('suppressed-spin');
         });
     }
     else
     {
         clearInterval(repeatDrawEventID);
-        document.querySelectorAll(".spin").forEach((x) => {
-            x.classList.remove("spin");
-            x.classList.add("suppressed-spin");
+        document.querySelectorAll('.spin').forEach((x) => {
+            x.classList.remove('spin');
+            x.classList.add('suppressed-spin');
         });
         repeatDrawEventID = null;
     }
@@ -368,14 +433,14 @@ buttonKillBackground.addEventListener("click", () => {
  */
 
 //set up on hover color change for the github logo
-const gitHubLink = document.getElementById("github-link");
-const gitHubLogo = document.getElementById("github-logo");
-gitHubLink.addEventListener("mouseenter", () => gitHubLogo.src = "asset/GitHub_Lockup_Dark_OnHover.png");
-gitHubLink.addEventListener("mouseleave", () => gitHubLogo.src = "asset/GitHub_Lockup_Dark.png");
+const gitHubLink = document.getElementById('github-link');
+const gitHubLogo = document.getElementById('github-logo');
+gitHubLink.addEventListener('mouseenter', () => gitHubLogo.src = 'asset/GitHub_Lockup_Dark_OnHover.png');
+gitHubLink.addEventListener('mouseleave', () => gitHubLogo.src = 'asset/GitHub_Lockup_Dark.png');
 
 
 //set up listener to enable secret title if it's after 3am
-const witchTitle = document.getElementById("witch-title");
+const witchTitle = document.getElementById('witch-title');
 function calcIsWitchingHours()
 {
     const thisHour = new Date().getHours();
@@ -393,13 +458,13 @@ setInterval(() => {
         if(isWitchingHours)
         {
             witchTitle.hidden = false;
-            witchTitle.classList.remove("fade-out");
-            witchTitle.classList.add("fade-in");
+            witchTitle.classList.remove('fade-out');
+            witchTitle.classList.add('fade-in');
         }
         else
         {
-            witchTitle.classList.remove("fade-in");
-            witchTitle.classList.add("fade-out");
+            witchTitle.classList.remove('fade-in');
+            witchTitle.classList.add('fade-out');
             setTimeout(()=>witchTitle.hidden = true, 21000);
         }   
     }
