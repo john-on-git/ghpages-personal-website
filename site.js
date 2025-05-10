@@ -29,9 +29,9 @@ class Automata {
         this.CANVAS = canvas;
 
         // drawing params for the dark dots at each cell
-        this.RADIUS_DOT = this.CELL_WIDTH * .05;
+        this.DOT_RADIUS = this.CELL_WIDTH * .05;
         this.DOT_FILL_COLOR = '#0E0067';
-        this
+        this.DOT_FILL_OPACITY = (2/3);
 
         // drawing params for the greyish lines between each cell
         this.LINK_CHANNEL_COLOR = '#0E0067';
@@ -82,8 +82,8 @@ class Automata {
             this.height = Math.floor(canvasHeight / this.CELL_HEIGHT); //should be based on screen aspect ratio
             // set the margins to the remainder
             this.margins = { 
-                width: Math.max(this.RADIUS_DOT, canvasWidth % this.CELL_WIDTH),
-                height: Math.max(this.RADIUS_DOT, canvasHeight % this.CELL_HEIGHT)
+                width: Math.max(this.DOT_RADIUS, canvasWidth % this.CELL_WIDTH),
+                height: Math.max(this.DOT_RADIUS, canvasHeight % this.CELL_HEIGHT)
             };
             //destroy the previous display
             this.CANVAS.innerHTML = '';
@@ -164,9 +164,10 @@ class Automata {
                     
                     //create the new dot display element.
                     //this must be done after the lines, as SVG element layering is based on order in the document, and dots should be above lines
-                    this.dotElementHandles[i][j] = this.addDotToCanvas(
+                    this.dotElementHandles[i][j] = this.addCircleToCanvas(
                         x, y,
-                        this.RADIUS_DOT,
+                        this.DOT_RADIUS,
+                        this.DOT_FILL_COLOR, this.DOT_FILL_OPACITY
                     );
                 }
             }
@@ -357,18 +358,19 @@ class Automata {
         this.CANVAS.appendChild(line);
         return line;
     }
-    addDotToCanvas(x,y, radius) {
+    addCircleToCanvas(x,y, radius, fillColor, fillOpacity=1) {
         //create the element
         const circle = document.createElementNS(this.CANVAS.namespaceURI, 'circle');
         //add it to the SVG
         this.CANVAS.appendChild(circle);
         
         //set attributes
-        circle.setAttribute('fill', this.DOT_FILL_COLOR);
         circle.setAttribute('cx', x);
         circle.setAttribute('cy', y);
         circle.setAttribute('r', radius);
-        
+        circle.setAttribute('fill', fillColor);
+        circle.setAttribute('fill-opacity', fillOpacity);
+
         return circle;
     }
     tick() {
