@@ -31,7 +31,7 @@ class Automata {
         // drawing params for the dark dots at each cell
         this.DOT_RADIUS = this.CELL_WIDTH * .05;
         this.DOT_FILL_COLOR = '#0E0067';
-        this.DOT_FILL_OPACITY = (2/3);
+        this.DOT_FILL_OPACITY = 0.5;
 
         // drawing params for the greyish lines between each cell
         this.LINK_CHANNEL_COLOR = '#0E0067';
@@ -89,6 +89,18 @@ class Automata {
             //destroy the previous display
             this.CANVAS.innerHTML = '';
             
+            const dots = document.createElementNS(this.CANVAS.namespaceURI, 'g');
+            dots.id = 'dots';
+            this.CANVAS.appendChild(dots);
+            
+            const links = document.createElementNS(this.CANVAS.namespaceURI, 'g');
+            links.id = 'links';
+            this.CANVAS.appendChild(links);
+
+            const channels = document.createElementNS(this.CANVAS.namespaceURI, 'g');
+            channels.id = 'channels';
+            this.CANVAS.appendChild(channels);
+            
             //update the arrays
             const nextCells = new Array(this.width);
             this.lineElementHandles = new Array(this.width);
@@ -117,6 +129,15 @@ class Automata {
                 {
                     const x = this.margins.width + ((i)*this.CELL_WIDTH) + (j%2===0 ? 0 : this.CELL_WIDTH/2); //x pos of cell
 
+                    //create the new dot display element.
+                    //this must be before after the lines, as SVG element layering is based on order in the document, and dots should be above lines
+                    this.dotElementHandles[i][j] = this.addCircleToCanvas(
+                        x, y,
+                        this.DOT_RADIUS,
+                        this.DOT_FILL_COLOR, this.DOT_FILL_OPACITY,
+                        dots
+                    );
+
                     //create the line display elements. but don't create elements that would extend off the edge of the grid
                     //first create the link channel (the thin grey lines that are always on)
                     //then create the active link (the thick blue lines that flicker)
@@ -126,13 +147,16 @@ class Automata {
                             x, y, 
                             x + this.CELL_WIDTH, y,
                             this.LINK_CHANNEL_COLOR, this.LINK_CHANNEL_WIDTH, this.LINK_CHANNEL_OPACITY,
+                            undefined,
+                            channels
                         );
 
                         this.lineElementHandles[i][(j*3)] = this.addLineToCanvas(
                             x, y, 
                             x + this.CELL_WIDTH, y,
                             this.ACTIVE_LINK_COLOR, this.ACTIVE_LINK_WIDTH, this.ACTIVE_LINK_OPACITY,
-                            'hidden'
+                            'hidden',
+                            links
                         );
                     }
                     if(this.hasBLLink(i,j))
@@ -141,14 +165,17 @@ class Automata {
                         this.addLineToCanvas(
                             x, y,
                             x - (this.CELL_WIDTH/2), y + this.CELL_HEIGHT,
-                            this.LINK_CHANNEL_COLOR, this.LINK_CHANNEL_WIDTH, this.LINK_CHANNEL_OPACITY
+                            this.LINK_CHANNEL_COLOR, this.LINK_CHANNEL_WIDTH, this.LINK_CHANNEL_OPACITY,
+                            undefined,
+                            channels
                         );
                         //bottom left
                         this.lineElementHandles[i][(j*3)+1] = this.addLineToCanvas(
                             x, y,
                             x - (this.CELL_WIDTH/2), y + this.CELL_HEIGHT,
                             this.ACTIVE_LINK_COLOR, this.ACTIVE_LINK_WIDTH, this.ACTIVE_LINK_OPACITY,
-                            'hidden'
+                            'hidden',
+                            links
                         );
                     }
                     // bottom right
@@ -156,23 +183,18 @@ class Automata {
                         this.addLineToCanvas(
                             x, y,
                             x + (this.CELL_WIDTH/2), y+this.CELL_HEIGHT,
-                            this.LINK_CHANNEL_COLOR, this.LINK_CHANNEL_WIDTH, this.LINK_CHANNEL_OPACITY
+                            this.LINK_CHANNEL_COLOR, this.LINK_CHANNEL_WIDTH, this.LINK_CHANNEL_OPACITY,
+                            undefined,
+                            channels
                         );
                         this.lineElementHandles[i][(j*3)+2] = this.addLineToCanvas(
                             x, y,
                             x + (this.CELL_WIDTH/2), y+this.CELL_HEIGHT,
                             this.ACTIVE_LINK_COLOR, this.ACTIVE_LINK_WIDTH, this.ACTIVE_LINK_OPACITY,
-                            'hidden'
+                            'hidden',
+                            links
                         );
                     }
-                    
-                    //create the new dot display element.
-                    //this must be done after the lines, as SVG element layering is based on order in the document, and dots should be above lines
-                    this.dotElementHandles[i][j] = this.addCircleToCanvas(
-                        x, y,
-                        this.DOT_RADIUS,
-                        this.DOT_FILL_COLOR, this.DOT_FILL_OPACITY
-                    );
                 }
             }
         }
@@ -351,7 +373,7 @@ class Automata {
             this.reset();
         }
     }
-    addLineToCanvas(x1,y1, x2,y2, color, width = 1, opacity=1, visibility='visible') {
+    addLineToCanvas(x1,y1, x2,y2, color, width = 1, opacity=1, visibility='visible', container=this.CANVAS) {
         //create the element
         const line = document.createElementNS(this.CANVAS.namespaceURI, 'line');
         //add it to the SVG
@@ -369,15 +391,16 @@ class Automata {
         line.setAttribute('visibility', visibility);
         
         line.setAttribute('shape-rendering', 'geometricPrecision');
+        line.setAttribute('stroke-linecap','round');
 
-        this.CANVAS.appendChild(line);
+        container.appendChild(line);
         return line;
     }
-    addCircleToCanvas(x,y, radius, fillColor, fillOpacity=1) {
+    addCircleToCanvas(x,y, radius, fillColor, fillOpacity=1, container=this.CANVAS) {
         //create the element
         const circle = document.createElementNS(this.CANVAS.namespaceURI, 'circle');
         //add it to the SVG
-        this.CANVAS.appendChild(circle);
+        container.appendChild(circle);
         
         //set attributes
         circle.setAttribute('cx', x);
