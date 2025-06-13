@@ -47,7 +47,7 @@ body {
     width: 80%;
     min-height: 83.5vh;
     
-    background-color: #F5F7F7E5;
+    background-color: #f5f7f7ce;
 
     font-size: 1rem;
 
@@ -67,6 +67,8 @@ body {
     
     padding-left: 1rem;
     padding-bottom: 1rem;
+
+    backdrop-filter: blur(1.5pt);
 }
 #sidebar {
     display: flex;
