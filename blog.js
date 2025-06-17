@@ -47,7 +47,7 @@ const index = {
                 const response = await fetch(url);
                 if(response.ok) {
                     const articles = await response.json();
-                    for(const [_,article] of Object.entries(articles)) //and add all to details cache
+                    for(const article of articles) //and add all to details cache
                     {
                         details.cached[article.id] = article;
                     }
