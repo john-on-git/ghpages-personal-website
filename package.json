@@ -18,6 +18,9 @@
   "homepage": "https://github.com/john-on-git/ghpages-personal-website#readme",
   "description": "My personal website.",
   "devDependencies": {
-    "cypress": "^14.4.1"
+    "@types/cypress": "^0.1.6",
+    "@types/jest": "^30.0.0",
+    "cypress": "^14.4.1",
+    "typescript": "^5.8.3"
   }
 }
