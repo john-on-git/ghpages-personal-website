@@ -4,6 +4,12 @@ asset/symbols/radio.png
 asset/symbols/symball.pdn
 asset/symbols/test.png
 
+
 dummy_blog_for_article_testing.html
 
+cypress/
+
 blog_manual_backup/*
+
+node_modules
+package-lock.json

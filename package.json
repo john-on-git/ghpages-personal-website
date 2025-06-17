@@ -1,0 +1,23 @@
+{
+  "name": "jgw-personal-website-v2",
+  "version": "1.0.0",
+  "main": "index.html",
+  "scripts": {
+    "test": "cypress run",
+    "cy:open": "cypress open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/john-on-git/ghpages-personal-website.git"
+  },
+  "author": "John Gregg-Webster",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/john-on-git/ghpages-personal-website/issues"
+  },
+  "homepage": "https://github.com/john-on-git/ghpages-personal-website#readme",
+  "description": "My personal website.",
+  "devDependencies": {
+    "cypress": "^14.4.1"
+  }
+}
