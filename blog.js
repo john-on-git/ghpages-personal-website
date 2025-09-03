@@ -298,3 +298,5 @@ if (offset > 0) {
     setTimeout(() => { preload(-1); }, 2500);
 }
 setTimeout(() => { preload(1); }, 5000);
+
+window.addEventListener('popstate', updateView);
