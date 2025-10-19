@@ -1,49 +1,52 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>John Site | Main</title>
-        <link rel="icon" type="image/x-icon" href="/asset/symbols/smile.png">
-        
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="initial-scale=1" />
 
-        <link rel="stylesheet" href="site.css">
-        <link rel="stylesheet" href="index.css">
+<head>
+    <title>John Site | Main</title>
+    <link rel="icon" type="image/x-icon" href="/asset/symbols/smile.png">
 
-        <script src="site.js" defer></script>
-        
-    </head>
-    <body>
-        <svg id="cellular-canvas" class="cellular-automata"></svg>
-        <img hidden id="witch-title" src="asset/gibberish.png">
-        
-        <div id="main-flex">
-            <div id="sidebar">
-                <p id="main-link" class="sidebar-link-inactive">Main</p>
-                <a id="blog-link" class="sidebar-link" href="blog.html">Blog</a>
-                <a id="github-link" class="sidebar-link" href="https://github.com/John-on-git"><img id="github-logo" src="asset/GitHub_Lockup_Dark.png"></a>
-                <!--TODO web neighbourhood, or webring back/forth-->
-                <div hidden class="random-symbol-grid">
-                    <img id="symbol-peace" class="" src="asset/symbols/peace.svg">
-                    <img class="" src="asset/symbols/yingyang.svg">
-                    <img class="spin" src="asset/symbols/angel_ray.png">
-                    <img class="" src="asset/symbols/smile.png">
-                </div>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1" />
+
+    <link rel="stylesheet" href="site.css">
+    <link rel="stylesheet" href="index.css">
+
+    <script src="site.js" defer></script>
+
+</head>
+
+<body>
+    <svg id="cellular-canvas" class="cellular-automata"></svg>
+    <img hidden id="witch-title" src="asset/gibberish.png">
+
+    <div id="main-flex">
+        <div id="sidebar">
+            <p id="main-link" class="sidebar-link-inactive">Main</p>
+            <a id="blog-link" class="sidebar-link" href="blog.html">Blog</a>
+            <a id="github-link" class="sidebar-link" href="https://github.com/John-on-git"><img id="github-logo"
+                    src="asset/GitHub_Lockup_Dark.png"></a>
+            <!--TODO web neighbourhood, or webring back/forth-->
+            <div hidden class="random-symbol-grid">
+                <img id="symbol-peace" class="" src="asset/symbols/peace.svg">
+                <img class="" src="asset/symbols/yingyang.svg">
+                <img class="spin" src="asset/symbols/angel_ray.png">
+                <img class="" src="asset/symbols/smile.png">
             </div>
-            <div id="pale-sheet" class="notched">
-                <div>
-                    <div id="left-pane">
-                        <div id="featured" data-cy="featured-article">
-                            <h2>Featured Article</h2>
-                            <div>
-                                <a href="blog.html?id=3">
-                                    <div id="featured-article-title">
-                                        <p>Setting up the Server</p>
-                                    </div>
-                                    <img src="asset/my_pi.webp">
-                                </a>
-                            </div>
-                            <!--
+        </div>
+        <div id="pale-sheet" class="notched">
+            <div>
+                <div id="left-pane">
+                    <div id="featured" data-cy="featured-article">
+                        <h2>Featured Article</h2>
+                        <div>
+                            <a href="blog.html?id=3">
+                                <div id="featured-article-title">
+                                    <p>Setting up the Server</p>
+                                </div>
+                                <img src="asset/my_pi.webp">
+                            </a>
+                        </div>
+                        <!--
                             <p id="no-featured-article-placeholder">
                                 Featured
                                 <br>
@@ -52,56 +55,62 @@
                                 Found
                             </p>
                             -->
-                        </div>
                     </div>
-                    <div id="about-me">
+                </div>
+                <div id="about-me">
+                    <div>
                         <div>
-                            <div>
-                                <div id="headshot-flex-container">
-                                    <div id="headshot-pseudoborder-left"></div> <!--::before doesn't work on img tags anyway-->
-                                    <img id="headshot" src="asset/headshot.png">
-                                </div>
-                                <div id="headshot-pseudoborder-bottom"></div>
+                            <div id="headshot-flex-container">
+                                <div id="headshot-pseudoborder-left"></div>
+                                <!--::before doesn't work on img tags anyway-->
+                                <img id="headshot" src="asset/headshot.png">
                             </div>
-                            <p>
-                                Hi! I'm John, I'm a professional software developer.
-                                I graduated from the University of Strathclyde in 2024, achieving a 2:1 Bachelors' in Computer Science.
+                            <div id="headshot-pseudoborder-bottom"></div>
+                        </div>
+                        <p>
+                            Hi! I'm John, I'm a professional software developer.
+                            I graduated from the University of Strathclyde in 2024, achieving a 2:1 Bachelors' in
+                            Computer Science.
 
-                                I have experience developing a variety of software, and, as you can see, that includes web development.
-                            </p>
-                            <p id="email">Email: johngreggwebster@gmail.com</p>
-                        </div>
-                        <div id="site-technical">
-                            <h2>About This Site</h2>
-                            <p>
-                                Personal websites are in vogue this millenium, so I just had to get online.
-                                This site's primary purpose is to provide a place to publicise my professional accomplishments,
-                                someday.
-                                <br>
-                                At the moment, you can find examples of my work here, as well as on my GitHub (left).
-                            </p>
-                            <br>
-                            <p>
-                                The site was created with just HTML/CSS/JS, no frameworks.
-                                The background uses a microservice-based architecture, in order to make it easier to mix-and-match different technologies.
-                                This is a portfolio piece, after all, and it's hard to improve by doing the same thing over and over.
-                                At the moment, the only service is the API for the <a href="blog.html">blog</a>: C#/Asp.Net, with Entity Framework.
-                            </p>
-                            <br>
-                            <p>	
-                                The site's design is intended to evoke Y2K revival/webcore vibes, as I'm a huge fan of the artistic and musical scene.
-                                Aesthetic cues include skeuomorphism, arcane symbols, and the juxtaposition of organic shapes with clean modernist lines
-                                
-                                <!--Unfortunately, it's quite difficult to incorporate that last point into a website. <span class="emoji-container"><img src="asset/symbols/sad.png"></span>-->
-                            </p>
-                            <br>
-                            <p>
-                                No generative AI was used in the development of this site.
-                            </p>
-                        </div>
+                            I have experience developing a variety of software, and, as you can see, that includes web
+                            development.
+                        </p>
+                        <p id="email">Email: johngreggwebster@gmail.com</p>
+                    </div>
+                    <div id="site-technical">
+                        <h2>About This Site</h2>
+                        <p>
+                            Personal websites are in vogue this millenium, so I just had to get online.
+                            At the moment, you can find examples of my work here, as well as on my GitHub (left).
+                        </p>
+                        <br>
+                        <p>
+                            The site was created with just HTML/CSS/JS, no frameworks.
+                            The background uses a microservice-based architecture, in order to make it easier to
+                            mix-and-match different technologies.
+                            This is a portfolio piece, after all, and it's hard to improve by doing the same thing over
+                            and over.
+                            At the moment, the only service is the API for the <a href="blog.html">blog</a>: C#/Asp.Net,
+                            with Entity Framework.
+                        </p>
+                        <br>
+                        <p>
+                            The site's design is intended to evoke Y2K revival/webcore vibes, as I'm a huge fan of the
+                            artistic and musical scene.
+                            Aesthetic cues include skeuomorphism, arcane symbols, and the juxtaposition of organic
+                            shapes with clean modernist lines
+
+                            <!--Unfortunately, it's quite difficult to incorporate that last point into a website. <span class="emoji-container"><img src="asset/symbols/sad.png"></span>-->
+                        </p>
+                        <br>
+                        <p>
+                            No generative AI was used in the development of this site.
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
-    </body>
+    </div>
+</body>
+
 </html>
