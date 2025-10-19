@@ -28,8 +28,6 @@ const index = {
 
     async use(offset) {
         //show index, hide details
-        recursiveSetVisibility(this.root, true);
-        this.root.style.display = "block";
 
         recursiveSetVisibility(details.root, false);
         details.root.style.display = "none";
@@ -90,6 +88,8 @@ const index = {
             }
 
             //update the view once everything's had time to load
+            recursiveSetVisibility(this.root, true);
+            this.root.style.display = "block";
 
             if ((offset === null || offset === 0) && articles.length === 0) {
                 recursiveSetVisibility(this.noArticles, true);
